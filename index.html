@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AIA Pro Achiever 3.0 - Strategic Wealth Advisor</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 15px; background-color: #f4f7f6; color: #333; font-size: 13px; }
+        
+        /* Auth Overlay */
+        #authOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #2c3e50; display: flex; justify-content: center; align-items: center; z-index: 9999; }
+        .auth-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        
+        .card { max-width: 1250px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .header-section { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #d31145; padding-bottom: 10px; margin-bottom: 20px; }
+        .confidential-tag { color: #d31145; font-weight: bold; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .gen-date { font-size: 11px; color: #666; margin-top: 2px; }
+        .btn-pdf { background: #d31145; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+        
+        .input-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .setup-box { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 6px; }
+        .market-box { background: #fff5f6; border: 1px solid #d31145; padding: 15px; border-radius: 6px; }
+        .input-group { margin-bottom: 12px; display: flex; flex-direction: column; }
+        label { font-weight: bold; margin-bottom: 5px; font-size: 0.9em; color: #d31145; }
+        input, select { padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95em; }
+        
+        .stats-bar { display: grid; gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: #2c3e50; color: white; padding: 12px; border-radius: 6px; text-align: center; border-bottom: 3px solid #ffbc00; }
+        .stat-val { font-size: 1.2em; font-weight: bold; color: #ffbc00; display: block; }
+        .cn-sub { font-size: 0.75em; display: block; opacity: 0.8; font-weight: normal; margin-bottom: 2px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10.5px; }
+        th { background: #d31145; color: white; padding: 8px 5px; text-align: left; vertical-align: top; line-height: 1.3; }
+        td { padding: 6px 5px; border-bottom: 1px solid #eee; }
+        .total-row { background: #fdf2f4; font-weight: bold; }
+        .return-col { background-color: #f0fdf4; color: #166534; font-weight: bold; text-align: center; }
+        .hidden { display: none !important; }
+        .disclaimer { margin-top: 25px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; font-size: 10.5px; color: #444; text-align: center; line-height: 1.5; }
+    </style>
+</head>
+<body>
+
+<div id="authOverlay">
+    <div class="auth-box">
+        <h2 style="color:#d31145; margin-top:0;">SP-Wesion Secure Access</h2>
+        <p>Please enter the password to view the Strategy Tool</p>
+        <input type="password" id="passInput" placeholder="Password" style="width: 200px; padding: 10px; margin-bottom: 20px; text-align: center; border: 1px solid #ddd; border-radius: 4px;">
+        <br>
+        <button class="btn-pdf" onclick="checkPass()">Unlock Access</button>
+        <p id="errorMsg" style="color:red; font-size:0.85em; margin-top:10px; visibility:hidden;">Incorrect password. Try again.</p>
+    </div>
+</div>
+
+<div class="card hidden" id="mainCard">
+    <div id="pdfContent">
+        <div class="header-section">
+            <div>
+                <div class="confidential-tag">For Internal Consultant Use Only</div>
+                <h1 style="color:#d31145; margin:0; font-size: 1.8em;">AIA Pro Achiever 3.0</h1>
+                <div class="gen-date">Analysis Date: January 2026</div>
+                <p style="margin:10px 0 0 0;">
+                    <span class="cn-sub">准备用于 / Prepared for:</span>
+                    <input type="text" id="clientName" value="GOH JUI TEOW" style="border:none; border-bottom:1px solid #ccc; font-weight:bold; color:#333; width:180px; font-size:1.1em;">
+                </p>
+            </div>
+            <div class="no-print">
+                <button class="btn-pdf" onclick="downloadPDF()">Download PDF Report</button>
+            </div>
+        </div>
+
+        <div class="input-container no-print">
+            <div class="setup-box">
+                <label class="cn-sub">1. 保单设置 / Policy Parameters</label>
+                <div class="input-group">
+                    <label>年缴保费 / Annual Premium (S$)</label>
+                    <input type="number" id="pIn" value="12000" oninput="calc()">
+                </div>
+                <div class="input-group">
+                    <label>初始投资期 / IIP (Years)</label>
+                    <select id="iip" onchange="calc()">
+                        <option value="10" selected>10 Years</option>
+                        <option value="15">15 Years</option>
+                        <option value="20">20 Years</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>停止缴费年份 / Stop Premium Year</label>
+                    <input type="number" id="stopYear" value="40" min="1" oninput="calc()">
+                </div>
+                <div class="input-group">
+                    <label>分红策略 / Dividend Strategy</label>
+                    <select id="strat" onchange="toggleInputs();">
+                        <option value="reinvest">再投资 (累计) / Reinvest All</option>
+                        <option value="cash">即刻提取现金 / Immediate Income</option>
+                        <option value="switch">累计后切换分红 / Accumulate then Income</option>
+                    </select>
+                </div>
+                <div id="switchYearGroup" class="input-group hidden">
+                    <label style="color:#fbc02d">切换年份 / Switch to Income at Year</label>
+                    <input type="number" id="switchYear" value="21" min="1" oninput="calc()">
+                </div>
+            </div>
+
+            <div class="market-box">
+                <label class="cn-sub">2. 市场假设 / Market Scenarios</label>
+                <div class="input-group">
+                    <label>总增长率 / Gross Growth (%)</label>
+                    <input type="number" id="rIn" value="8" oninput="calc()">
+                </div>
+                <div class="input-group hidden" id="divGroup">
+                    <label>预期分红率 (AGDIF) / Div. Yield (%)</label>
+                    <input type="number" id="dIn" value="5.50" step="0.1" oninput="calc()">
+                </div>
+                <div class="input-group">
+                    <label>演示年限 / Analysis Duration</label>
+                    <input type="number" id="tIn" value="40" oninput="calc()">
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-bar" id="statsBar">
+            <div class="stat-card">
+                <span class="cn-sub">总已付保费</span>Total Outlay
+                <span class="stat-val" id="sOut">$0</span>
+            </div>
+            <div class="stat-card">
+                <span class="cn-sub">保单价值</span>Policy Value
+                <span class="stat-val" id="sVal">$0</span>
+            </div>
+            <div class="stat-card" id="divStatCard">
+                <span class="cn-sub">累计分红</span>Total Div.
+                <span class="stat-val" id="sCash">$0</span>
+            </div>
+            <div class="stat-card">
+                <span class="cn-sub">总利益</span>Total Benefit
+                <span class="stat-val" id="sTot">$0</span>
+            </div>
+            <div class="stat-card">
+                <span class="cn-sub">总回报率</span>Total Return
+                <span class="stat-val" id="sReturn">0%</span>
+            </div>
+        </div>
+
+        <canvas id="mainChart" style="max-height: 280px; margin-bottom: 20px;"></canvas>
+
+        <table id="mainTable">
+            <thead>
+                <tr id="tableHeaderRow">
+                    <th>年份<br>Year</th>
+                    <th>缴付保费<br>Premium</th>
+                    <th>迎新奖金<br>Welcome Bonus</th>
+                    <th>特别奖金<br>Special Bonus</th>
+                    <th>费用<br>Charges</th>
+                    <th class="div-col hidden">当年分红<br>Yearly Div.</th>
+                    <th>保单价值<br>Policy Value</th>
+                    <th>总利益<br>Total Benefit</th>
+                    <th>回报率 %<br>Return %</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+
+        <div class="disclaimer">
+            <strong>一般免责声明 / General Disclaimer:</strong><br>
+            本演示仅供参考。实际数据将根据市场表现而有所不同。请参阅保险合同了解完整条款。<br>
+            This is for illustration purposes only. Actual numbers will vary based on market performance. Refer to contract.
+        </div>
+    </div>
+</div>
+
+<script>
+    const SECRET_CODE = "wesion7";
+
+    function checkPass() {
+        const input = document.getElementById('passInput').value;
+        if (input === SECRET_CODE) {
+            document.getElementById('authOverlay').style.display = 'none';
+            document.getElementById('mainCard').classList.remove('hidden');
+            toggleInputs();
+        } else {
+            document.getElementById('errorMsg').style.visibility = 'visible';
+        }
+    }
+
+    // Enter key to submit
+    document.getElementById('passInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') checkPass();
+    });
+
+    function toggleInputs() {
+        const strat = document.getElementById('strat').value;
+        const isDivActive = strat !== 'reinvest';
+        document.getElementById('switchYearGroup').classList.toggle('hidden', strat !== 'switch');
+        document.getElementById('divGroup').classList.toggle('hidden', !isDivActive);
+        document.getElementById('divStatCard').classList.toggle('hidden', !isDivActive);
+        document.querySelectorAll('.div-col').forEach(el => el.classList.toggle('hidden', !isDivActive));
+        document.getElementById('statsBar').style.gridTemplateColumns = isDivActive ? 'repeat(5, 1fr)' : 'repeat(4, 1fr)';
+        calc();
+    }
+
+    function getWelcomeBonusRate(premium, iip, year) {
+        if (year > 3) return 0;
+        if (iip == 10) {
+            if (premium >= 12000) return [0.15, 0.18, 0.20][year-1];
+            if (premium >= 7200) return [0.10, 0.13, 0.15][year-1];
+            return year === 1 ? 0.05 : 0;
+        } else if (iip == 15) {
+            if (premium >= 12000) return [0.18, 0.21, 0.24][year-1];
+            if (premium >= 7200) return [0.13, 0.16, 0.19][year-1];
+            return year === 1 ? 0.08 : 0;
+        } else {
+            if (premium >= 12000) return [0.20, 0.25, 0.30][year-1];
+            if (premium >= 7200) return [0.15, 0.20, 0.25][year-1];
+            return year === 1 ? 0.10 : 0;
+        }
+    }
+
+    function roundDown100(val) { return Math.floor(val / 100) * 100; }
+
+    function calc() {
+        const pOrig = parseFloat(document.getElementById('pIn').value) || 0;
+        const iip = parseInt(document.getElementById('iip').value);
+        const stopY = parseInt(document.getElementById('stopYear').value) || 999;
+        const grossR = parseFloat(document.getElementById('rIn').value) / 100;
+        const netR = grossR - 0.015; 
+        const strat = document.getElementById('strat').value;
+        const sYearInput = parseInt(document.getElementById('switchYear').value) || 21;
+        const divRate = parseFloat(document.getElementById('dIn').value) / 100;
+        const duration = parseInt(document.getElementById('tIn').value) || 40;
+
+        let labels = [], pVals = [], tBenefits = [], outlays = [];
+        let curV = 0, tPaid = 0, tCashAccum = 0, h = "";
+
+        for (let y = 1; y <= duration; y++) {
+            let isPay = y <= stopY;
+            let currentP = isPay ? pOrig : 0;
+            tPaid += currentP;
+            curV += currentP;
+
+            let wb = isPay ? roundDown100(pOrig * getWelcomeBonusRate(pOrig, iip, y)) : 0;
+            let sb = 0;
+            if (isPay) {
+                if (y >= 10 && y <= 20) sb = roundDown100(pOrig * 0.05);
+                else if (y >= 21) sb = roundDown100(pOrig * 0.08);
+            }
+            curV += (wb + sb);
+
+            let sc = (y <= 10) ? Math.ceil(curV * 0.039) : 0;
+            let phc = (!isPay && y <= iip) ? Math.ceil(pOrig * 0.05) : 0; 
+            curV -= (sc + phc);
+            curV = Math.floor(curV * (1 + netR));
+
+            let yearlyDiv = 0;
+            let startDivYear = (strat === 'cash') ? 1 : (strat === 'switch' ? sYearInput : 999);
+            if (y >= startDivYear) {
+                yearlyDiv = roundDown100(curV * divRate);
+                curV -= yearlyDiv;
+                tCashAccum += yearlyDiv;
+            }
+
+            let dPV = roundDown100(curV);
+            let dTB = roundDown100(curV + tCashAccum);
+            let returnPerc = tPaid > 0 ? ((dTB / tPaid) * 100).toFixed(0) : 0;
+
+            labels.push("Year " + y); pVals.push(dPV); tBenefits.push(dTB); outlays.push(tPaid);
+
+            h += `<tr>
+                <td>${y}</td>
+                <td>$${currentP.toLocaleString()}</td>
+                <td style="color:green">$${wb.toLocaleString()}</td>
+                <td style="color:blue">$${sb.toLocaleString()}</td>
+                <td style="color:red">-$${(sc + phc).toLocaleString()}</td>
+                ${strat !== 'reinvest' ? `<td style="color:#2ecc71">$${yearlyDiv.toLocaleString()}</td>` : ''}
+                <td style="font-weight:bold">$${dPV.toLocaleString()}</td>
+                <td class="total-row">$${dTB.toLocaleString()}</td>
+                <td class="return-col">${returnPerc}%</td>
+            </tr>`;
+        }
+
+        document.getElementById('tableBody').innerHTML = h;
+        document.getElementById('sOut').innerText = "$" + tPaid.toLocaleString();
+        document.getElementById('sVal').innerText = "$" + (pVals[duration-1]).toLocaleString();
+        document.getElementById('sTot').innerText = "$" + tBenefits[duration-1].toLocaleString();
+        document.getElementById('sCash').innerText = "$" + tCashAccum.toLocaleString();
+        document.getElementById('sReturn').innerText = (tPaid > 0 ? ((tBenefits[duration-1] / tPaid) * 100).toFixed(0) : 0) + "%";
+
+        const ctx = document.getElementById('mainChart').getContext('2d');
+        if (window.myChart) window.myChart.destroy();
+        window.myChart = new Chart(ctx, {
+            type: 'line',
+            data: { labels: labels, datasets: [
+                { label: 'Total Benefit', data: tBenefits, borderColor: '#2ecc71', backgroundColor: 'rgba(46, 204, 113, 0.1)', fill: true, tension: 0.1 },
+                { label: 'Policy Value', data: pVals, borderColor: '#d31145', fill: false, tension: 0.1 },
+                { label: 'Total Outlay', data: outlays, borderColor: '#95a5a6', borderDash: [5, 5], fill: false, tension: 0 }
+            ]},
+            options: { 
+                responsive: true, maintainAspectRatio: false, animation: false,
+                plugins: { tooltip: { mode: 'index', intersect: false, callbacks: { label: c => (c.dataset.label + ': $' + c.parsed.y.toLocaleString()) } } },
+                scales: { y: { ticks: { callback: v => '$' + v.toLocaleString() } } }
+            }
+        });
+    }
+
+    function downloadPDF() {
+        const element = document.getElementById('pdfContent');
+        const name = document.getElementById('clientName').value || 'Client';
+        html2pdf().set({ margin: 0.5, filename: `ProAchiever3.0_${name}.pdf`, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' } }).from(element).save();
+    }
+</script>
+</body>
+</html>
