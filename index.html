@@ -8,14 +8,12 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 15px; background-color: #f4f7f6; color: #333; font-size: 13px; }
         
-        /* Auth Overlay */
         #authOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #2c3e50; display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .auth-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         
         .card { max-width: 1250px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .header-section { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #d31145; padding-bottom: 10px; margin-bottom: 20px; }
         .confidential-tag { color: #d31145; font-weight: bold; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
-        .gen-date { font-size: 11px; color: #666; margin-top: 2px; }
         
         .btn-group { display: flex; gap: 10px; }
         .btn-pdf { background: #d31145; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
@@ -79,6 +77,10 @@
                 <div class="input-group">
                     <label>年缴保费 / Annual Premium (S$)</label>
                     <input type="number" id="pIn" value="12000" oninput="calc()">
+                </div>
+                <div class="input-group">
+                    <label>受保人年龄 / Age (ALB)</label>
+                    <input type="number" id="ageIn" value="40" oninput="calc()">
                 </div>
                 <div class="input-group">
                     <label>初始投资期 / IIP (Years)</label>
@@ -151,7 +153,7 @@
         <table id="mainTable">
             <thead>
                 <tr id="tableHeaderRow">
-                    <th>年份<br>Year</th>
+                    <th>年份 / 年龄<br>Year / Age</th>
                     <th>缴付保费<br>Premium</th>
                     <th>迎新奖金<br>Welcome Bonus</th>
                     <th>特别奖金<br>Special Bonus</th>
@@ -176,11 +178,7 @@
 <script>
     const SECRET_CODE = "wesion7";
 
-    function init() { 
-        if (document.getElementById('authOverlay').style.display === 'none') {
-            toggleInputs();
-        }
-    }
+    function init() { if (document.getElementById('authOverlay').style.display === 'none') toggleInputs(); }
 
     function checkPass() {
         const input = document.getElementById('passInput').value;
@@ -193,9 +191,7 @@
         }
     }
 
-    document.getElementById('passInput').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') checkPass();
-    });
+    document.getElementById('passInput').addEventListener('keypress', e => { if (e.key === 'Enter') checkPass(); });
 
     function toggleInputs() {
         const strat = document.getElementById('strat').value;
@@ -211,6 +207,7 @@
     function clearData() {
         document.getElementById('clientName').value = "VALUED CLIENT";
         document.getElementById('pIn').value = 12000;
+        document.getElementById('ageIn').value = 40;
         document.getElementById('iip').value = 10;
         document.getElementById('stopYear').value = 40;
         document.getElementById('strat').value = "reinvest";
@@ -241,23 +238,23 @@
 
     function calc() {
         const pOrig = parseFloat(document.getElementById('pIn').value) || 0;
+        const startAge = parseInt(document.getElementById('ageIn').value) || 0;
         const iip = parseInt(document.getElementById('iip').value);
         const stopY = parseInt(document.getElementById('stopYear').value) || 999;
-        const grossR = parseFloat(document.getElementById('rIn').value) / 100;
-        const netR = grossR - 0.015; 
+        const netR = (parseFloat(document.getElementById('rIn').value) / 100) - 0.015;
         const strat = document.getElementById('strat').value;
         const sYearInput = parseInt(document.getElementById('switchYear').value) || 21;
         const divRate = parseFloat(document.getElementById('dIn').value) / 100;
         const duration = parseInt(document.getElementById('tIn').value) || 40;
 
         let labels = [], pVals = [], tBenefits = [], outlays = [];
-        let curV = 0, tPaid = 0, tCashAccum = 0, h = "";
+        let curV = 0, tPaid = 0, tCash = 0, h = "";
+        let splitPoint = -1;
 
         for (let y = 1; y <= duration; y++) {
             let isPay = y <= stopY;
             let currentP = isPay ? pOrig : 0;
-            tPaid += currentP;
-            curV += currentP;
+            tPaid += currentP; curV += currentP;
 
             let wb = isPay ? roundDown100(pOrig * getWelcomeBonusRate(pOrig, iip, y)) : 0;
             let sb = 0;
@@ -266,58 +263,79 @@
                 else if (y >= 21) sb = roundDown100(pOrig * 0.08);
             }
             curV += (wb + sb);
-
             let sc = (y <= 10) ? Math.ceil(curV * 0.039) : 0;
-            let phc = (!isPay && y <= iip) ? Math.ceil(pOrig * 0.05) : 0; 
-            curV -= (sc + phc);
-            curV = Math.floor(curV * (1 + netR));
+            let phc = (!isPay && y <= iip) ? Math.ceil(pOrig * 0.05) : 0;
+            curV = Math.floor((curV - (sc + phc)) * (1 + netR));
 
-            let yearlyDiv = 0;
-            let startDivYear = (strat === 'cash') ? 1 : (strat === 'switch' ? sYearInput : 999);
-            if (y >= startDivYear) {
-                yearlyDiv = roundDown100(curV * divRate);
-                curV -= yearlyDiv;
-                tCashAccum += yearlyDiv;
+            let yDiv = 0;
+            let sDivY = (strat === 'cash') ? 1 : (strat === 'switch' ? sYearInput : 999);
+            if (y >= sDivY) {
+                yDiv = roundDown100(curV * divRate); curV -= yDiv; tCash += yDiv;
+                if (yDiv > 0 && splitPoint === -1) splitPoint = y - 1;
             }
 
-            let dPV = roundDown100(curV);
-            let dTB = roundDown100(curV + tCashAccum);
-            let returnPerc = tPaid > 0 ? ((dTB / tPaid) * 100).toFixed(0) : 0;
-
-            labels.push("Year " + y); pVals.push(dPV); tBenefits.push(dTB); outlays.push(tPaid);
+            let dPV = roundDown100(curV), dTB = roundDown100(curV + tCash);
+            labels.push("Y" + y); pVals.push(dPV); tBenefits.push(dTB); outlays.push(tPaid);
 
             h += `<tr>
-                <td>${y}</td>
+                <td>${y} / ${startAge + y}</td>
                 <td>$${currentP.toLocaleString()}</td>
                 <td style="color:green">$${wb.toLocaleString()}</td>
                 <td style="color:blue">$${sb.toLocaleString()}</td>
                 <td style="color:red">-$${(sc + phc).toLocaleString()}</td>
-                ${strat !== 'reinvest' ? `<td style="color:#2ecc71">$${yearlyDiv.toLocaleString()}</td>` : ''}
+                ${strat !== 'reinvest' ? `<td style="color:#2ecc71">$${yDiv.toLocaleString()}</td>` : ''}
                 <td style="font-weight:bold">$${dPV.toLocaleString()}</td>
                 <td class="total-row">$${dTB.toLocaleString()}</td>
-                <td class="return-col">${returnPerc}%</td>
+                <td class="return-col">${tPaid > 0 ? ((dTB / tPaid) * 100).toFixed(0) : 0}%</td>
             </tr>`;
         }
 
         document.getElementById('tableBody').innerHTML = h;
         document.getElementById('sOut').innerText = "$" + tPaid.toLocaleString();
-        document.getElementById('sVal').innerText = "$" + (pVals[duration-1]).toLocaleString();
+        document.getElementById('sVal').innerText = "$" + pVals[duration-1].toLocaleString();
         document.getElementById('sTot').innerText = "$" + tBenefits[duration-1].toLocaleString();
-        document.getElementById('sCash').innerText = "$" + tCashAccum.toLocaleString();
+        document.getElementById('sCash').innerText = "$" + tCash.toLocaleString();
         document.getElementById('sReturn').innerText = (tPaid > 0 ? ((tBenefits[duration-1] / tPaid) * 100).toFixed(0) : 0) + "%";
 
         const ctx = document.getElementById('mainChart').getContext('2d');
         if (window.myChart) window.myChart.destroy();
+        
+        let datasets = [
+            { label: 'Total Benefit', data: tBenefits, borderColor: '#2ecc71', backgroundColor: 'rgba(46, 204, 113, 0.1)', fill: true, tension: 0.1 },
+            { label: 'Total Outlay', data: outlays, borderColor: '#95a5a6', borderDash: [5, 5], fill: false, tension: 0 }
+        ];
+
+        // Process PV data to hide redundant values from mouseover/legend
+        if (splitPoint !== -1) {
+            let processedPV = pVals.map((val, idx) => (idx < splitPoint) ? null : val);
+            datasets.splice(1, 0, { 
+                label: 'Policy Value', 
+                data: processedPV, 
+                borderColor: '#d31145', 
+                fill: false, 
+                tension: 0.1,
+                spanGaps: false 
+            });
+        }
+
         window.myChart = new Chart(ctx, {
             type: 'line',
-            data: { labels: labels, datasets: [
-                { label: 'Total Benefit', data: tBenefits, borderColor: '#2ecc71', backgroundColor: 'rgba(46, 204, 113, 0.1)', fill: true, tension: 0.1 },
-                { label: 'Policy Value', data: pVals, borderColor: '#d31145', fill: false, tension: 0.1 },
-                { label: 'Total Outlay', data: outlays, borderColor: '#95a5a6', borderDash: [5, 5], fill: false, tension: 0 }
-            ]},
+            data: { labels: labels, datasets: datasets },
             options: { 
                 responsive: true, maintainAspectRatio: false, animation: false,
-                plugins: { tooltip: { mode: 'index', intersect: false, callbacks: { label: c => (c.dataset.label + ': $' + c.parsed.y.toLocaleString()) } } },
+                plugins: { 
+                    tooltip: { 
+                        mode: 'index', 
+                        intersect: false, 
+                        callbacks: { 
+                            label: function(context) {
+                                // Double check null to hide from tooltip
+                                if (context.parsed.y === null) return null;
+                                return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                            }
+                        } 
+                    } 
+                },
                 scales: { y: { ticks: { callback: v => '$' + v.toLocaleString() } } }
             }
         });
