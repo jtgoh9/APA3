@@ -8,7 +8,6 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 15px; background-color: #f4f7f6; color: #333; font-size: 13px; }
         
-        /* Consistent Auth Overlay */
         #authOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #2c3e50; display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .auth-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 350px; }
         .auth-box h2 { color: #d31145; margin: 0 0 10px 0; font-size: 1.5em; }
@@ -91,11 +90,11 @@
                 <label class="cn-sub">1. 保单设置 / Policy Parameters</label>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:10px;">
                     <div class="input-group"><label>年缴保费 / Premium</label><input type="number" id="pIn" value="12000" oninput="calc()"></div>
-                    <div class="input-group"><label>起始年龄 / Entry Age</label><input type="number" id="ageIn" value="40" oninput="calc()"></div>
+                    <div class="input-group"><label>受保人年龄 / Age</label><input type="number" id="ageIn" value="40" oninput="calc()"></div>
                 </div>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
                     <div class="input-group"><label>IIP (Years)</label><select id="iip" onchange="calc()"><option value="10" selected>10 Years</option><option value="15">15 Years</option><option value="20">20 Years</option></select></div>
-                    <div class="input-group"><label>停止缴费 / Stop Yr</label><input type="number" id="stopYear" value="40" oninput="calc()"></div>
+                    <div class="input-group"><label>停止缴费年龄 / Stop at Age</label><input type="number" id="stopAge" value="80" oninput="calc()"></div>
                 </div>
                 <div class="input-group">
                     <label>分红策略 / Dividend Strategy</label>
@@ -105,9 +104,9 @@
                         <option value="switch">累计后切换分红 / Accumulate then Income</option>
                     </select>
                 </div>
-                <div id="switchYearGroup" class="input-group hidden">
-                    <label style="color:#fbc02d">切换年份 / Switch Year</label>
-                    <input type="number" id="switchYear" value="21" oninput="calc()">
+                <div id="switchAgeGroup" class="input-group hidden">
+                    <label style="color:#fbc02d">切换年龄 / Switch at Age</label>
+                    <input type="number" id="switchAge" value="61" oninput="calc()">
                 </div>
                 <div class="col-manager-btn" onclick="toggleColManager()">表格显示设置 / Table Columns ▾</div>
                 <div id="colManager" class="col-manager-content">
@@ -202,7 +201,7 @@
         const strat = document.getElementById('strat').value;
         const isDivActive = strat !== 'reinvest';
         const isCompActive = document.getElementById('enableComp').checked;
-        document.getElementById('switchYearGroup').classList.toggle('hidden', strat !== 'switch');
+        document.getElementById('switchAgeGroup').classList.toggle('hidden', strat !== 'switch');
         document.getElementById('switchGrowthGroup').classList.toggle('hidden', strat !== 'switch');
         document.getElementById('divStatCard').classList.toggle('hidden', !isDivActive);
         document.getElementById('compSettings').classList.toggle('hidden', !isCompActive);
@@ -219,11 +218,12 @@
         document.getElementById('pIn').value = 12000;
         document.getElementById('ageIn').value = 40;
         document.getElementById('iip').value = 10;
-        document.getElementById('stopYear').value = 40;
+        document.getElementById('stopAge').value = 80;
         document.getElementById('strat').value = "reinvest";
         document.getElementById('enableComp').checked = false;
         document.getElementById('rIn').value = 8;
         document.getElementById('postRIn').value = 5;
+        document.getElementById('switchAge').value = 61;
         document.querySelectorAll('.col-toggle').forEach(chk => chk.checked = true);
         document.getElementById('colManager').style.display = 'none';
         toggleInputs();
@@ -240,13 +240,19 @@
         const pIn = parseFloat(document.getElementById('pIn').value) || 0;
         const startAge = parseInt(document.getElementById('ageIn').value) || 0;
         const iip = parseInt(document.getElementById('iip').value);
-        const stopY = parseInt(document.getElementById('stopYear').value) || 999;
+        const stopAgeInput = parseInt(document.getElementById('stopAge').value) || (startAge + 99);
         const gR = parseFloat(document.getElementById('rIn').value) / 100, postGR = parseFloat(document.getElementById('postRIn').value) / 100;
         const fmc = 0.015, strat = document.getElementById('strat').value;
-        const sYear = parseInt(document.getElementById('switchYear').value) || 21;
         const dRate = parseFloat(document.getElementById('dIn').value) / 100;
         const duration = parseInt(document.getElementById('tIn').value) || 40;
         const isComp = document.getElementById('enableComp').checked, cRate = parseFloat(document.getElementById('compRate').value) / 100;
+
+        let minSwitchAge = startAge + iip + 1;
+        let targetAge = parseInt(document.getElementById('switchAge').value);
+        if (strat === 'switch' && targetAge < minSwitchAge) {
+            targetAge = minSwitchAge;
+            document.getElementById('switchAge').value = targetAge;
+        }
 
         const visibleCols = Array.from(document.querySelectorAll('.col-toggle:checked')).map(el => parseInt(el.value));
         visibleCols.push(0, 5, 7, 8); 
@@ -256,25 +262,29 @@
         let splitIdx = -1;
 
         for (let y = 1; y <= duration; y++) {
-            let isPay = y <= stopY, curP = isPay ? pIn : 0;
+            let currentAge = startAge + y;
+            let isPay = currentAge <= stopAgeInput, curP = isPay ? pIn : 0;
             tPaid += curP; curV += curP; curComp = (curComp + curP) * (1 + cRate);
+            
             let wb = isPay ? Math.floor(pIn * getWelcomeRate(pIn, iip, y) / 100) * 100 : 0;
             let sb = isPay ? (y >= 10 && y <= 20 ? Math.floor(pIn * 0.05 / 100) * 100 : (y >= 21 ? Math.floor(pIn * 0.08 / 100) * 100 : 0)) : 0;
             curV += (wb + sb);
+            
             let sc = (y <= 10) ? Math.ceil(curV * 0.039) : 0, phc = (!isPay && y <= iip) ? Math.ceil(pIn * 0.05) : 0;
-            let activeNet = (strat === 'switch' && y >= sYear) ? (postGR - fmc) : (gR - fmc);
+            let activeNet = (strat === 'switch' && currentAge >= targetAge) ? (postGR - fmc) : (gR - fmc);
             curV = Math.floor((curV - (sc + phc)) * (1 + activeNet));
-            let yDiv = 0, sDivY = (strat === 'cash') ? 1 : (strat === 'switch' ? sYear : 999);
-            if (y >= sDivY) {
+            
+            let yDiv = 0, sDivAge = (strat === 'cash') ? 0 : (strat === 'switch' ? targetAge : 999);
+            if (currentAge >= sDivAge) {
                 yDiv = Math.floor(curV * dRate / 100) * 100; curV -= yDiv; tCash += yDiv;
                 if (yDiv > 0 && splitIdx === -1) splitIdx = y - 1;
             }
             let dPV = Math.floor(curV/100)*100, dTB = Math.floor((curV+tCash)/100)*100;
-            labels.push(startAge + y); pVals.push(dPV); tBenefits.push(dTB); outlays.push(tPaid); compVals.push(Math.floor(curComp/100)*100);
+            labels.push(currentAge); pVals.push(dPV); tBenefits.push(dTB); outlays.push(tPaid); compVals.push(Math.floor(curComp/100)*100);
 
-            let isSwitchRow = (strat === 'switch' && y === sYear);
+            let isSwitchRow = (strat === 'switch' && currentAge === targetAge);
             h += `<tr class="${isSwitchRow ? 'highlight-switch' : ''}">
-                <td>${y} / ${startAge + y}</td>
+                <td>${y} / ${currentAge}</td>
                 ${visibleCols.includes(1) ? `<td>$${curP.toLocaleString()}</td>` : ''}
                 ${visibleCols.includes(2) ? `<td style="color:green">$${wb.toLocaleString()}</td>` : ''}
                 ${visibleCols.includes(3) ? `<td style="color:blue">$${sb.toLocaleString()}</td>` : ''}
@@ -314,7 +324,7 @@
             options: { 
                 responsive: true, maintainAspectRatio: false, animation: false,
                 plugins: { tooltip: { mode: 'index', intersect: false, callbacks: { label: c => c.parsed.y === null ? null : c.dataset.label + ': $' + c.parsed.y.toLocaleString() } } },
-                scales: { x: { title: { display: true, text: 'Attained Age' } }, y: { ticks: { callback: v => '$' + v.toLocaleString() } } }
+                scales: { y: { ticks: { callback: v => '$' + v.toLocaleString() } } }
             }
         });
     }
