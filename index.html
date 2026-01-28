@@ -233,9 +233,26 @@
 
     function getWelcomeRate(p, i, y) {
         if (y > 3) return 0;
-        if (i == 10) return p >= 12000 ? [0.15, 0.18, 0.20][y-1] : (p >= 7200 ? [0.10, 0.13, 0.15][y-1] : (y==1?0.05:0));
-        if (i == 15) return p >= 12000 ? [0.18, 0.21, 0.24][y-1] : (p >= 7200 ? [0.13, 0.16, 0.19][y-1] : (y==1?0.08:0));
-        return p >= 12000 ? [0.20, 0.25, 0.30][y-1] : (p >= 7200 ? [0.15, 0.20, 0.25][y-1] : (y==1?0.10:0));
+        // logic for Welcome Bonus tiers based on premium bands
+        if (i == 10) {
+            if (p >= 12000) return [0.15, 0.18, 0.20][y-1];
+            if (p >= 7200) return [0.10, 0.13, 0.15][y-1];
+            if (p >= 4800) return [0.05, 0.08, 0.10][y-1];
+            return (y === 1) ? 0.05 : 0;
+        }
+        if (i == 15) {
+            if (p >= 12000) return [0.18, 0.21, 0.24][y-1];
+            if (p >= 7200) return [0.13, 0.16, 0.19][y-1];
+            if (p >= 4800) return [0.08, 0.11, 0.14][y-1];
+            return (y === 1) ? 0.08 : 0;
+        }
+        if (i == 20) {
+            if (p >= 12000) return [0.20, 0.25, 0.30][y-1];
+            if (p >= 7200) return [0.15, 0.20, 0.25][y-1];
+            if (p >= 4800) return [0.10, 0.15, 0.20][y-1];
+            return (y === 1) ? 0.10 : 0;
+        }
+        return 0;
     }
 
     function calc() {
@@ -264,9 +281,12 @@
             let currentAge = startAge + y;
             let isPay = currentAge <= stopAgeInput, curP = isPay ? pIn : 0;
             tPaid += curP; curV += curP; curComp = (curComp + curP) * (1 + cRate);
-            let wb = isPay ? Math.floor(pIn * getWelcomeRate(pIn, iip, y) / 100) * 100 : 0;
-            let sb = isPay ? (y >= 10 && y <= 20 ? Math.floor(pIn * 0.05 / 100) * 100 : (y >= 21 ? Math.floor(pIn * 0.08 / 100) * 100 : 0)) : 0;
+            
+            // Calculate Bonuses
+            let wb = isPay ? Math.floor(pIn * getWelcomeRate(pIn, iip, y)) : 0;
+            let sb = isPay ? (y >= 10 && y <= 20 ? Math.floor(pIn * 0.05) : (y >= 21 ? Math.floor(pIn * 0.08) : 0)) : 0;
             let totalBonus = wb + sb; curV += totalBonus;
+            
             let sc = (y <= 10) ? Math.ceil(curV * 0.039) : 0, phc = (!isPay && y <= iip) ? Math.ceil(pIn * 0.05) : 0;
             let activeNet = (strat === 'switch' && currentAge >= targetAge) ? (postGR - fmc) : (gR - fmc);
             curV = Math.floor((curV - (sc + phc)) * (1 + activeNet));
