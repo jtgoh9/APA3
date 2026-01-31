@@ -2,47 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>AIA Pro Achiever 3.0 - Strategic Wealth Advisor</title>
+    <title>AIA Pro Achiever 3.0 </title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         :root { --aia-red: #d31145; --navy: #2c3e50; --gold: #ffbc00; --emerald: #2ecc71; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 15px; background-color: #f4f7f6; color: #333; font-size: 13px; }
+        
         #authOverlay { position: fixed; inset: 0; background: var(--navy); display: flex; justify-content: center; align-items: center; z-index: 9999; }
         .auth-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 350px; }
+        
         .card { max-width: 1400px; margin: auto; background: white; padding: 25px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .header-section { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid var(--aia-red); padding-bottom: 10px; margin-bottom: 20px; }
+        
         .input-container { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px; }
         .setup-box, .market-box { background: #fff; border: 1px solid #ddd; padding: 15px; border-radius: 6px; }
         .withdraw-box { background: #fdf2f4; border: 1.5px solid var(--aia-red); padding: 15px; border-radius: 6px; }
+        
         .input-group { margin-bottom: 12px; display: flex; flex-direction: column; }
         label { font-weight: bold; margin-bottom: 5px; font-size: 0.85em; color: var(--aia-red); }
         input, select { padding: 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 0.9em; }
+        
         .ls-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; background: white; font-size: 11px; }
         .ls-table th { background: var(--aia-red); color: white; padding: 4px; }
         .ls-table td { padding: 4px; border: 1px solid #eee; }
+
         .stats-bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 20px; }
         .stat-card { background: var(--navy); color: white; padding: 12px; border-radius: 6px; text-align: center; border-bottom: 3px solid var(--gold); }
         .stat-val { font-size: 1.1em; font-weight: bold; color: var(--gold); display: block; }
         .cn-sub { font-size: 0.75em; display: block; opacity: 0.8; margin-bottom: 2px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10.5px; }
-        th { background: var(--aia-red); color: white; padding: 8px 5px; text-align: left; }
-        td { padding: 6px 5px; border-bottom: 1px solid #eee; cursor: pointer; }
+        
+        table#mainTable { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 10.5px; }
+        th { background: var(--aia-red); color: white; padding: 10px 5px; text-align: left; }
+        td { padding: 8px 5px; border-bottom: 1px solid #eee; cursor: pointer; transition: background 0.2s; }
+        
         .highlight-switch { background-color: #fff9c4 !important; font-weight: bold; border-left: 4px solid var(--gold); }
         .row-click-highlight { background-color: #e3f2fd !important; }
         .total-row { background: #fdf2f4; font-weight: bold; color: var(--aia-red); }
+        
         .hidden { display: none !important; }
-        .disclaimer { margin-top: 25px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; font-size: 10.5px; text-align: center; }
+        .disclaimer { margin-top: 25px; padding: 15px; background: #f9f9f9; border: 1px solid #ddd; font-size: 10px; text-align: center; color: #666; line-height: 1.6; }
+        
+        @media print { .no-print { display: none !important; } body { background: white; } }
     </style>
 </head>
 <body onload="init()">
 
 <div id="authOverlay">
     <div class="auth-box">
-        <h2 style="color:var(--aia-red);">Wesion Secure Access</h2>
-        <p>Enter password to view APA 3.0 Advisor Tool</p>
+        <h2 style="color:var(--aia-red); margin-top:0;">Wesion Secure Access</h2>
+        <p style="font-size:12px; color:#666;"><br>Enter password to view APA 3.0 Advisor Tool</p>
         <input type="password" id="passInput" placeholder="Password" onkeydown="if(event.key==='Enter') checkPass()" style="width: 200px; padding: 10px; margin-bottom: 10px; text-align: center; border: 1px solid #ddd; border-radius: 4px;">
-        <button style="width: 220px; background:var(--aia-red); color:white; border:none; padding:10px; border-radius:4px; cursor:pointer;" onclick="checkPass()">Unlock Access</button>
+        <button style="width: 220px; background:var(--aia-red); color:white; border:none; padding:10px; border-radius:4px; cursor:pointer; font-weight:bold;" onclick="checkPass()">Unlock Access</button>
+        <p id="errorMsg" style="color:red; font-size:0.85em; margin-top:15px; visibility:hidden;">密码错误 / Incorrect password.</p>
     </div>
 </div>
 
@@ -52,61 +64,65 @@
             <div>
                 <div style="color: var(--aia-red); font-weight: bold; font-size: 10px;">PRIVATE & CONFIDENTIAL - FOR INTERNAL USE ONLY</div>
                 <h1 style="color:var(--aia-red); margin:0; font-size: 1.8em;">AIA Pro Achiever 3.0</h1>
-                <p style="margin-top:10px;"><input type="text" id="clientName" value="VALUED CLIENT" style="border:none; border-bottom:1px solid #ccc; font-weight:bold; width:220px; font-size:1.1em;"></p>
+                <div id="reportDate" style="font-size:11px; color:#666; margin-top:4px;"></div>
+                <p style="margin-top:15px;">
+                    <span class="cn-sub">准备用于 / Prepared for:</span>
+                    <input type="text" id="clientName" value="VALUED CLIENT" style="border:none; border-bottom:1px solid #ccc; font-weight:bold; width:250px; font-size:1.1em; color:#333;">
+                </p>
             </div>
             <div class="no-print" style="display:flex; gap:10px;">
                 <button style="background:#7f8c8d; color:white; border:none; padding:8px 16px; border-radius:4px; cursor:pointer;" onclick="location.reload()">Clear All</button>
-                <button style="background:var(--aia-red); color:white; border:none; padding:8px 16px; border-radius:4px; cursor:pointer; font-weight:bold;" onclick="downloadPDF()">Download PDF</button>
+                <button style="background:var(--aia-red); color:white; border:none; padding:8px 16px; border-radius:4px; cursor:pointer; font-weight:bold;" onclick="downloadPDF()">Download PDF Report</button>
             </div>
         </div>
 
         <div class="input-container no-print">
             <div class="setup-box">
-                <label>1. Policy Parameters</label>
-                <div class="input-group"><label>Annual Premium (S$)</label><input type="number" id="pIn" value="12000" oninput="calc()"></div>
-                <div class="input-group"><label>Entry Age</label><input type="number" id="ageIn" value="40" oninput="calc()"></div>
+                <label>1. 保单设置 / Policy Parameters</label>
+                <div class="input-group"><label>年缴保费 / Annual Premium (S$)</label><input type="number" id="pIn" value="12000" oninput="calc()"></div>
+                <div class="input-group"><label>受保人年龄 / Entry Age</label><input type="number" id="ageIn" value="40" oninput="calc()"></div>
                 <div class="input-group"><label>IIP (Years)</label><select id="iip" onchange="calc()"><option value="10" selected>10 Years</option><option value="15">15 Years</option><option value="20">20 Years</option></select></div>
                 <div class="input-group">
-                    <label>Strategy</label>
+                    <label>策略 / Strategy</label>
                     <select id="strat" onchange="toggleInputs()">
-                        <option value="reinvest">Reinvest All</option>
-                        <option value="switch">Accumulate then Income</option>
-                        <option value="cash">Immediate Income</option>
+                        <option value="reinvest">再投资 (累计) / Reinvest All</option>
+                        <option value="switch">累计后切换分红 / Accumulate then Income</option>
+                        <option value="cash">即刻提取现金 / Immediate Income</option>
                     </select>
                 </div>
-                <div id="switchGroup" class="input-group hidden"><label>Income Start Age</label><input type="number" id="switchAge" value="65" onchange="calc()"></div>
+                <div id="switchGroup" class="input-group hidden"><label>收益开始年龄 / Income Start Age</label><input type="number" id="switchAge" value="65" onchange="calc()"></div>
             </div>
 
             <div class="withdraw-box">
-                <label>2. Withdrawal Module</label>
+                <label>2. 提取设置 / Withdrawal Module</label>
                 <table class="ls-table" id="lsTable">
-                    <thead><tr><th>Age</th><th>Lump Sum</th><th></th></tr></thead>
+                    <thead><tr><th>年龄 Age</th><th>单次提取 Lump Sum</th><th></th></tr></thead>
                     <tbody id="lsBody"></tbody>
                 </table>
-                <button style="background:var(--emerald); color:white; border:none; padding:4px 8px; border-radius:3px; cursor:pointer; font-size:10px; width:100%;" onclick="addLsRow()">+ Add Lump Sum</button>
+                <button style="background:var(--emerald); color:white; border:none; padding:4px 8px; border-radius:3px; cursor:pointer; font-size:10px; width:100%;" onclick="addLsRow()">+ 添加单次提取 / Add Lump Sum</button>
                 <hr style="border:0; border-top:1px solid #ddd; margin:15px 0;">
-                <div class="input-group"><label>Periodic Withdrawal (S$ p.a.)</label><input type="number" id="pAmt" value="0" oninput="calc()"></div>
+                <div class="input-group"><label>定期提取 / Periodic (S$ p.a.)</label><input type="number" id="pAmt" value="0" oninput="calc()"></div>
                 <div style="display: flex; gap: 10px;">
-                    <div class="input-group" style="flex:1"><label>From</label><input type="number" id="pStart" value="61" oninput="calc()"></div>
-                    <div class="input-group" style="flex:1"><label>To</label><input type="number" id="pEnd" value="80" oninput="calc()"></div>
+                    <div class="input-group" style="flex:1"><label>由 From</label><input type="number" id="pStart" value="61" oninput="calc()"></div>
+                    <div class="input-group" style="flex:1"><label>至 To</label><input type="number" id="pEnd" value="80" oninput="calc()"></div>
                 </div>
             </div>
 
             <div class="market-box">
-                <label>3. Market Assumption</label>
-                <div class="input-group"><label>Gross Accum. Return %</label><input type="number" id="rIn" value="8" step="0.5" oninput="calc()"></div>
-                <div class="input-group"><label>Gross Income Return %</label><input type="number" id="postRIn" value="5" step="0.5" oninput="calc()"></div>
-                <div class="input-group"><label>Manual FMC %</label><input type="number" id="fmcIn" value="1.5" step="0.1" oninput="calc()"></div>
-                <div class="input-group"><label>Div. Yield %</label><input type="number" id="dIn" value="5.50" step="0.1" oninput="calc()"></div>
+                <label>3. 市场假设 / Market Scenarios</label>
+                <div class="input-group"><label>累计期增长率 / Accum. Growth %</label><input type="number" id="rIn" value="8" step="0.5" oninput="calc()"></div>
+                <div class="input-group"><label>收益期增长率 / Income Return %</label><input type="number" id="postRIn" value="5" step="0.5" oninput="calc()"></div>
+                <div class="input-group"><label>手动管理费 / Manual FMC %</label><input type="number" id="fmcIn" value="1.5" step="0.1" oninput="calc()"></div>
+                <div class="input-group"><label>分红率 / Dividend Yield %</label><input type="number" id="dIn" value="5.50" step="0.1" oninput="calc()"></div>
             </div>
         </div>
 
         <div class="stats-bar">
-            <div class="stat-card"><span class="cn-sub">Total Paid</span><span class="stat-val" id="sOut">$0</span></div>
-            <div class="stat-card"><span class="cn-sub">Policy Value</span><span class="stat-val" id="sVal">$0</span></div>
-            <div class="stat-card"><span class="cn-sub">Total Payout</span><span class="stat-val" id="sCash">$0</span></div>
-            <div class="stat-card"><span class="cn-sub">Total Benefit</span><span class="stat-val" id="sTot">$0</span></div>
-            <div class="stat-card"><span class="cn-sub">Multiplier</span><span class="stat-val" id="sMult">0x</span></div>
+            <div class="stat-card"><span class="cn-sub">总已付保费</span>Total Outlay<span class="stat-val" id="sOut">$0</span></div>
+            <div class="stat-card"><span class="cn-sub">保单价值</span>Policy Value<span class="stat-val" id="sVal">$0</span></div>
+            <div class="stat-card"><span class="cn-sub">累计收益/提取</span>Total Payout<span class="stat-val" id="sCash">$0</span></div>
+            <div class="stat-card"><span class="cn-sub">总利益</span>Total Benefit<span class="stat-val" id="sTot">$0</span></div>
+            <div class="stat-card"><span class="cn-sub">增值倍数</span>Multiplier<span class="stat-val" id="sMult">0x</span></div>
         </div>
 
         <canvas id="mainChart" style="max-height: 280px; margin-bottom: 15px;"></canvas>
@@ -114,19 +130,23 @@
         <table id="mainTable">
             <thead>
                 <tr>
-                    <th>Year / Age</th>
-                    <th>Premium</th>
-                    <th>Bonuses</th>
-                    <th>Charges</th>
-                    <th>Div / WD</th>
-                    <th>Policy Val</th>
-                    <th>Total Benefit</th>
-                    <th>Return %</th>
+                    <th>年份/年龄<br>Year/Age</th>
+                    <th>保费<br>Premium</th>
+                    <th>奖金<br>Bonuses</th>
+                    <th>费用<br>Charges</th>
+                    <th>分红/提款<br>Div/WD</th>
+                    <th>保单价值<br>Policy Val</th>
+                    <th>总利益<br>Total Benefit</th>
+                    <th>回报率<br>Return %</th>
                 </tr>
             </thead>
             <tbody id="tableBody"></tbody>
         </table>
-        <div class="disclaimer">Note: Supplementary Charge (3.9%) applied post-growth. Returns are not guaranteed.</div>
+        
+        <div class="disclaimer">
+            <strong>免责声明 Disclaimer:</strong> 本演示仅供参考。实际数据将根据市场表现而有所不同。请参阅保险合同了解完整条款。<br>
+            Supplementary Charge (3.90%) is applied post-growth per high-charge methodology. Figures are rounded to the nearest $100.
+        </div>
     </div>
 </div>
 
@@ -135,21 +155,26 @@
     let chart;
     const rd = (v) => Math.max(0, Math.floor(v / 100) * 100);
 
+    function setReportDate() {
+        const d = new Date();
+        const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        document.getElementById('reportDate').innerText = "Analysis Date: " + months[d.getMonth()] + " " + d.getFullYear();
+    }
+
     function checkPass() {
         if (document.getElementById('passInput').value === SECRET_CODE) {
             document.getElementById('authOverlay').style.display = 'none';
             document.getElementById('mainCard').classList.remove('hidden');
+            setReportDate();
             calc();
-        }
+        } else { document.getElementById('errorMsg').style.visibility = 'visible'; }
     }
-
-    function init() { toggleInputs(); }
 
     function addLsRow() {
         const row = document.getElementById('lsBody').insertRow();
-        row.innerHTML = `<td><input type="number" class="ls-age" value="50" oninput="calc()" style="width:45px;"></td>
-                         <td><input type="number" class="ls-val" value="10000" oninput="calc()" style="width:80px;"></td>
-                         <td><button onclick="this.parentElement.parentElement.remove(); calc();">×</button></td>`;
+        row.innerHTML = `<td><input type="number" class="ls-age" value="55" oninput="calc()" style="width:45px;"></td>
+                         <td><input type="number" class="ls-val" value="20000" oninput="calc()" style="width:80px;"></td>
+                         <td><button style="border:none; background:none; color:red; cursor:pointer; font-weight:bold;" onclick="this.parentElement.parentElement.remove(); calc();">×</button></td>`;
         calc();
     }
 
@@ -187,9 +212,9 @@
             if (age) lsMap[age] = parseFloat(row.querySelector('.ls-val').value) || 0;
         });
 
-        let lbs = [], pVals = [], tBenefits = [], h = "", tPaid = 0, tCash = 0, curV = 0, terminated = false;
+        let lbs = [], pVals = [], outlays = [], tBenefits = [], h = "", tPaid = 0, tCash = 0, curV = 0, terminated = false;
 
-        for (let y = 1; y <= 40; y++) {
+        for (let y = 1; y <= 50; y++) {
             if (terminated) break;
             let age = startAge + y;
             let curP = (y <= 60 && age <= 80) ? p : 0;
@@ -206,7 +231,9 @@
             curV -= sc;
 
             let cashOut = 0;
-            if (strat !== 'reinvest' && (strat === 'cash' || (strat === 'switch' && age >= sAge))) { cashOut = Math.floor(curV * divYield); }
+            if (strat !== 'reinvest' && (strat === 'cash' || (strat === 'switch' && age >= sAge))) {
+                cashOut = Math.floor(curV * divYield);
+            }
             if (lsMap[age]) cashOut += lsMap[age];
             if (age >= pStart && age <= pEnd) cashOut += pAmt;
 
@@ -214,12 +241,18 @@
             curV -= cashOut; tCash += cashOut;
 
             let dPV = rd(curV), dTB = rd(curV + tCash);
-            lbs.push(age); pVals.push(dPV); tBenefits.push(dTB);
+            lbs.push(age); pVals.push(dPV); outlays.push(tPaid); tBenefits.push(dTB);
 
             h += `<tr onclick="this.classList.toggle('row-click-highlight')" class="${age === sAge ? 'highlight-switch' : ''}">
-                <td>${y} / ${age}</td><td>$${curP.toLocaleString()}</td><td>$${(wb+sb).toLocaleString()}</td><td>-$${sc.toLocaleString()}</td>
-                <td style="color:var(--emerald)">$${cashOut.toLocaleString()}</td><td>$${dPV.toLocaleString()}</td><td class="total-row">$${dTB.toLocaleString()}</td>
-                <td>${terminated ? '❌ Ends' : Math.round(dTB/tPaid*100)+'%'}</td></tr>`;
+                <td style="font-weight:bold">${y} / ${age}</td>
+                <td>$${curP.toLocaleString()}</td>
+                <td>$${(wb+sb).toLocaleString()}</td>
+                <td style="color:#c0392b">-$${sc.toLocaleString()}</td>
+                <td style="color:var(--emerald); font-weight:bold;">$${cashOut.toLocaleString()}</td>
+                <td>$${dPV.toLocaleString()}</td>
+                <td class="total-row">$${dTB.toLocaleString()}</td>
+                <td style="color:#2980b9; font-weight:bold;">${terminated ? '❌ Terminated' : Math.round(dTB/tPaid*100)+'%'}</td>
+            </tr>`;
         }
 
         document.getElementById('tableBody').innerHTML = h;
@@ -230,9 +263,17 @@
         document.getElementById('sMult').innerText = tPaid > 0 ? (tBenefits[tBenefits.length-1]/tPaid).toFixed(1) + "x" : "0x";
 
         if (chart) chart.destroy();
-        chart = new Chart(document.getElementById('mainChart'), { type: 'line', data: { labels: lbs, datasets: [{ label: 'Total Benefit', data: tBenefits, borderColor: '#2ecc71', fill: false }, { label: 'Policy Value', data: pVals, borderColor: '#d31145', fill: true, backgroundColor: 'rgba(211, 17, 69, 0.05)' }] }, options: { responsive: true, maintainAspectRatio: false, animation: false } });
+        chart = new Chart(document.getElementById('mainChart'), {
+            type: 'line',
+            data: { labels: lbs, datasets: [{ label: 'Total Benefit (利益)', data: tBenefits, borderColor: '#2ecc71', fill: false }, { label: 'Policy Value (价值)', data: pVals, borderColor: '#d31145', fill: true, backgroundColor: 'rgba(211, 17, 69, 0.05)' }] },
+            options: { responsive: true, maintainAspectRatio: false, animation: false, scales: { y: { ticks: { callback: v => '$' + v.toLocaleString() } } }, plugins: { tooltip: { mode: 'index', intersect: false } } }
+        });
     }
-    function downloadPDF() { html2pdf().set({ margin: 0.3, filename: 'APA3_Advisor_Report.pdf', jsPDF: { format: 'a4', orientation: 'landscape' } }).from(document.getElementById('pdfContent')).save(); }
+
+    function downloadPDF() {
+        const opt = { margin: 0.3, filename: 'APA3_Strategic_Report.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2 }, jsPDF: { format: 'a4', orientation: 'landscape' } };
+        html2pdf().set(opt).from(document.getElementById('pdfContent')).save();
+    }
 </script>
 </body>
 </html>
