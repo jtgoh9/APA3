@@ -455,6 +455,232 @@
             cursor: pointer;
         }
 
+        /* ==================== BONUS INFO PANEL ==================== */
+        .bonus-info-toggle {
+            width: 100%;
+            background: linear-gradient(135deg, var(--navy) 0%, #2c3e50 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            transition: all 0.3s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bonus-info-toggle:hover {
+            background: linear-gradient(135deg, #2c3e50 0%, var(--navy) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        #bonusToggleIcon {
+            display: inline-block;
+            transition: transform 0.3s;
+            font-size: 14px;
+        }
+
+        #bonusToggleIcon.expanded {
+            transform: rotate(90deg);
+        }
+
+        .bonus-info-panel {
+            margin-top: 16px;
+            padding: 30px;
+            background: white;
+            border: 2px solid var(--slate-200);
+            border-radius: 12px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bonus-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .bonus-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            padding: 24px;
+            border-radius: 12px;
+            border: 2px solid var(--slate-200);
+        }
+
+        .bonus-card h3 {
+            color: var(--aia-red);
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .bonus-subtitle {
+            color: var(--slate-600);
+            font-size: 13px;
+            margin: 0 0 20px 0;
+            font-weight: 600;
+        }
+
+        .bonus-tier-group {
+            margin-bottom: 20px;
+        }
+
+        .bonus-tier-group h4 {
+            color: var(--navy);
+            font-size: 14px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            padding: 8px 12px;
+            background: var(--slate-100);
+            border-radius: 6px;
+        }
+
+        .bonus-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .bonus-table th {
+            background: var(--navy);
+            color: white;
+            padding: 10px 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .bonus-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid var(--slate-200);
+        }
+
+        .bonus-table tbody tr:nth-child(even) {
+            background: var(--slate-50);
+        }
+
+        .bonus-table tbody tr:hover {
+            background: var(--blue-50);
+        }
+
+        .bonus-example {
+            background: linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--navy);
+            border-left: 4px solid var(--gold);
+            margin-top: 12px;
+        }
+
+        .special-bonus-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--slate-200);
+        }
+
+        .special-bonus-item {
+            margin-bottom: 20px;
+        }
+
+        .special-bonus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--slate-200);
+        }
+
+        .bonus-period {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .bonus-rate {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--aia-red);
+        }
+
+        .bonus-examples-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .bonus-example-item {
+            background: var(--slate-50);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--slate-200);
+        }
+
+        .example-premium {
+            font-size: 12px;
+            color: var(--slate-600);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .example-amount {
+            font-size: 15px;
+            color: var(--emerald);
+            font-weight: 800;
+        }
+
+        .special-bonus-divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--slate-300), transparent);
+            margin: 20px 0;
+        }
+
+        .bonus-note {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--navy);
+            border-left: 4px solid var(--blue-500);
+            margin-top: 16px;
+        }
+
+        .bonus-info-footer {
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+            padding: 16px 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--aia-red);
+        }
+
+        .bonus-info-footer p {
+            margin: 0;
+            font-size: 12px;
+            color: var(--slate-700);
+            line-height: 1.6;
+        }
+
         /* ==================== STATS BAR ==================== */
         .stats-bar {
             display: grid;
@@ -696,6 +922,206 @@
             </div>
 
             <!-- INPUT SECTION -->
+            <div class="no-print" style="margin-bottom: 20px;">
+                <button class="bonus-info-toggle" onclick="toggleBonusInfo()">
+                    <span id="bonusToggleIcon">▶</span> View Bonus Structure Details (Welcome Bonus & Special Bonus)
+                </button>
+                <div id="bonusInfoPanel" class="bonus-info-panel" style="display: none;">
+                    <div class="bonus-info-grid">
+                        <!-- Welcome Bonus Section -->
+                        <div class="bonus-card">
+                            <h3>🎁 Welcome Bonus</h3>
+                            <p class="bonus-subtitle">First 3 Years Only</p>
+                            
+                            <div class="bonus-tier-group">
+                                <h4>IIP 10 Years</h4>
+                                <table class="bonus-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Premium Tier</th>
+                                            <th>Year 1</th>
+                                            <th>Year 2</th>
+                                            <th>Year 3</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>≥ $12,000</td>
+                                            <td>15%</td>
+                                            <td>18%</td>
+                                            <td>20%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$7,200 - $11,999</td>
+                                            <td>10%</td>
+                                            <td>13%</td>
+                                            <td>15%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$4,800 - $7,199</td>
+                                            <td>5%</td>
+                                            <td>8%</td>
+                                            <td>10%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$2,400 - $4,799</td>
+                                            <td>5%</td>
+                                            <td>0%</td>
+                                            <td>0%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="bonus-tier-group">
+                                <h4>IIP 15 Years</h4>
+                                <table class="bonus-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Premium Tier</th>
+                                            <th>Year 1</th>
+                                            <th>Year 2</th>
+                                            <th>Year 3</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>≥ $12,000</td>
+                                            <td>18%</td>
+                                            <td>21%</td>
+                                            <td>24%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$7,200 - $11,999</td>
+                                            <td>13%</td>
+                                            <td>16%</td>
+                                            <td>19%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$4,800 - $7,199</td>
+                                            <td>8%</td>
+                                            <td>11%</td>
+                                            <td>14%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$2,400 - $4,799</td>
+                                            <td>8%</td>
+                                            <td>0%</td>
+                                            <td>0%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="bonus-tier-group">
+                                <h4>IIP 20 Years</h4>
+                                <table class="bonus-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Premium Tier</th>
+                                            <th>Year 1</th>
+                                            <th>Year 2</th>
+                                            <th>Year 3</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>≥ $12,000</td>
+                                            <td>20%</td>
+                                            <td>25%</td>
+                                            <td>30%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$7,200 - $11,999</td>
+                                            <td>15%</td>
+                                            <td>20%</td>
+                                            <td>25%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$4,800 - $7,199</td>
+                                            <td>10%</td>
+                                            <td>15%</td>
+                                            <td>20%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$2,400 - $4,799</td>
+                                            <td>10%</td>
+                                            <td>0%</td>
+                                            <td>0%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="bonus-example">
+                                <strong>Example:</strong> Premium $12,000 with IIP 10<br>
+                                Year 1: $1,800 | Year 2: $2,160 | Year 3: $2,400
+                            </div>
+                        </div>
+
+                        <!-- Special Bonus Section -->
+                        <div class="bonus-card">
+                            <h3>⭐ Special Bonus</h3>
+                            <p class="bonus-subtitle">From Year 10 Onwards</p>
+                            
+                            <div class="special-bonus-section">
+                                <div class="special-bonus-item">
+                                    <div class="special-bonus-header">
+                                        <span class="bonus-period">Years 10-20</span>
+                                        <span class="bonus-rate">5% of Premium</span>
+                                    </div>
+                                    <div class="bonus-examples-grid">
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$12,000 premium</div>
+                                            <div class="example-amount">= $600 / year</div>
+                                        </div>
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$7,200 premium</div>
+                                            <div class="example-amount">= $360 / year</div>
+                                        </div>
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$4,800 premium</div>
+                                            <div class="example-amount">= $240 / year</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="special-bonus-divider"></div>
+
+                                <div class="special-bonus-item">
+                                    <div class="special-bonus-header">
+                                        <span class="bonus-period">Year 21+</span>
+                                        <span class="bonus-rate">8% of Premium</span>
+                                    </div>
+                                    <div class="bonus-examples-grid">
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$12,000 premium</div>
+                                            <div class="example-amount">= $960 / year</div>
+                                        </div>
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$7,200 premium</div>
+                                            <div class="example-amount">= $576 / year</div>
+                                        </div>
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$4,800 premium</div>
+                                            <div class="example-amount">= $384 / year</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="bonus-note">
+                                <strong>💡 Note:</strong> Special bonus only applies while premiums are being paid (up to Stop Paying Age)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bonus-info-footer">
+                        <p><strong>Important:</strong> All bonuses shown are non-guaranteed and subject to AIA Singapore's discretion. Bonus rates may vary based on actual policy terms and conditions.</p>
+                    </div>
+                </div>
+            </div>
+
             <div class="input-container no-print">
                 <!-- Policy Parameters -->
                 <div class="input-box">
@@ -958,6 +1384,21 @@ function checkPassword() {
 }
 
 // ==================== UI CONTROLS ====================
+function toggleBonusInfo() {
+    const panel = document.getElementById('bonusInfoPanel');
+    const icon = document.getElementById('bonusToggleIcon');
+    
+    if (panel.style.display === 'none') {
+        panel.style.display = 'block';
+        icon.classList.add('expanded');
+        icon.textContent = '▼';
+    } else {
+        panel.style.display = 'none';
+        icon.classList.remove('expanded');
+        icon.textContent = '▶';
+    }
+}
+
 function toggleColumnManager() {
     const content = document.getElementById('colManagerContent');
     content.style.display = content.style.display === 'block' ? 'none' : 'block';
