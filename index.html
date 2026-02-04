@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=1600, initial-scale=1.0, user-scalable=no">
-    <title>AIA Wealth Venture - Strategic Wealth Advisor</title>
+    <meta name="viewport" content="width=1400, initial-scale=0.5, maximum-scale=1.0, user-scalable=yes">
+    <title>AIA Pro Achiever 3.0 - Strategic Wealth Advisor</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --aia-red: #d31145;
-            --navy: #2c3e50;
-            --gold: #ffbc00;
+            --navy: #1a2332;
+            --gold: #f4b942;
             --emerald: #10b981;
             --amber: #f59e0b;
             --slate-50: #f8fafc;
@@ -23,7 +23,6 @@
             --blue-50: #eff6ff;
             --blue-100: #dbeafe;
             --blue-500: #3b82f6;
-            --pink-bg: #fffafb;
         }
 
         * {
@@ -34,7 +33,7 @@
 
         body {
             font-family: 'IBM Plex Sans', -apple-system, sans-serif;
-            background: linear-gradient(135deg, var(--slate-50) 0%, var(--slate-200) 100%);
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
             color: var(--navy);
             font-size: 14px;
             line-height: 1.6;
@@ -42,11 +41,11 @@
             padding: 20px;
         }
 
-        /* ==================== AUTHENTICATION OVERLAY (The Gatekeeper) ==================== */
+        /* ==================== AUTHENTICATION OVERLAY ==================== */
         #authOverlay {
             position: fixed;
             inset: 0;
-            background: linear-gradient(135deg, var(--navy) 0%, #1a2838 100%);
+            background: linear-gradient(135deg, var(--navy) 0%, #2c3e50 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -138,7 +137,7 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
-        /* ==================== HEADER SECTION (Branding) ==================== */
+        /* ==================== HEADER ==================== */
         .header-section {
             display: flex;
             justify-content: space-between;
@@ -244,7 +243,7 @@
             box-shadow: 0 10px 20px -5px rgba(211, 17, 69, 0.3);
         }
 
-        /* ==================== INPUT ECOSYSTEM (3-Column Grid) ==================== */
+        /* ==================== INPUT SECTION ==================== */
         .input-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -277,7 +276,7 @@
         }
 
         .withdrawal-box {
-            background: var(--pink-bg);
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3f2 100%);
             border-color: #fed7aa;
         }
 
@@ -415,7 +414,7 @@
         }
 
         .add-ls-btn {
-            background: var(--emerald);
+            background: var(--navy);
             color: white;
             border: none;
             padding: 10px 16px;
@@ -429,7 +428,7 @@
         }
 
         .add-ls-btn:hover {
-            background: #059669;
+            background: #2c3e50;
             transform: translateY(-2px);
         }
 
@@ -456,7 +455,233 @@
             cursor: pointer;
         }
 
-        /* ==================== STATISTIC BAR (The Big Numbers) ==================== */
+        /* ==================== BONUS INFO PANEL ==================== */
+        .bonus-info-toggle {
+            width: 100%;
+            background: linear-gradient(135deg, var(--navy) 0%, #2c3e50 100%);
+            color: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 15px;
+            font-family: 'IBM Plex Sans', sans-serif;
+            transition: all 0.3s;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bonus-info-toggle:hover {
+            background: linear-gradient(135deg, #2c3e50 0%, var(--navy) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        #bonusToggleIcon {
+            display: inline-block;
+            transition: transform 0.3s;
+            font-size: 14px;
+        }
+
+        #bonusToggleIcon.expanded {
+            transform: rotate(90deg);
+        }
+
+        .bonus-info-panel {
+            margin-top: 16px;
+            padding: 30px;
+            background: white;
+            border: 2px solid var(--slate-200);
+            border-radius: 12px;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bonus-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .bonus-card {
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+            padding: 24px;
+            border-radius: 12px;
+            border: 2px solid var(--slate-200);
+        }
+
+        .bonus-card h3 {
+            color: var(--aia-red);
+            margin: 0 0 8px 0;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .bonus-subtitle {
+            color: var(--slate-600);
+            font-size: 13px;
+            margin: 0 0 20px 0;
+            font-weight: 600;
+        }
+
+        .bonus-tier-group {
+            margin-bottom: 20px;
+        }
+
+        .bonus-tier-group h4 {
+            color: var(--navy);
+            font-size: 14px;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            padding: 8px 12px;
+            background: var(--slate-100);
+            border-radius: 6px;
+        }
+
+        .bonus-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .bonus-table th {
+            background: var(--navy);
+            color: white;
+            padding: 10px 8px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 11px;
+        }
+
+        .bonus-table td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid var(--slate-200);
+        }
+
+        .bonus-table tbody tr:nth-child(even) {
+            background: var(--slate-50);
+        }
+
+        .bonus-table tbody tr:hover {
+            background: var(--blue-50);
+        }
+
+        .bonus-example {
+            background: linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--navy);
+            border-left: 4px solid var(--gold);
+            margin-top: 12px;
+        }
+
+        .special-bonus-section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--slate-200);
+        }
+
+        .special-bonus-item {
+            margin-bottom: 20px;
+        }
+
+        .special-bonus-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--slate-200);
+        }
+
+        .bonus-period {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--navy);
+        }
+
+        .bonus-rate {
+            font-size: 18px;
+            font-weight: 900;
+            color: var(--aia-red);
+        }
+
+        .bonus-examples-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .bonus-example-item {
+            background: var(--slate-50);
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid var(--slate-200);
+        }
+
+        .example-premium {
+            font-size: 12px;
+            color: var(--slate-600);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .example-amount {
+            font-size: 15px;
+            color: var(--emerald);
+            font-weight: 800;
+        }
+
+        .special-bonus-divider {
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--slate-300), transparent);
+            margin: 20px 0;
+        }
+
+        .bonus-note {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: var(--navy);
+            border-left: 4px solid var(--blue-500);
+            margin-top: 16px;
+        }
+
+        .bonus-info-footer {
+            background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+            padding: 16px 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--aia-red);
+        }
+
+        .bonus-info-footer p {
+            margin: 0;
+            font-size: 12px;
+            color: var(--slate-700);
+            line-height: 1.6;
+        }
+
+        /* ==================== STATS BAR ==================== */
         .stats-bar {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
@@ -465,7 +690,7 @@
         }
 
         .stat-card {
-            background: linear-gradient(135deg, var(--navy) 0%, #1a2838 100%);
+            background: linear-gradient(135deg, var(--navy) 0%, #2c3e50 100%);
             color: white;
             padding: 20px;
             border-radius: 12px;
@@ -501,7 +726,7 @@
             margin-top: 6px;
         }
 
-        /* ==================== CHART DESIGN ==================== */
+        /* ==================== CHART ==================== */
         #mainChart {
             max-height: 350px;
             margin-bottom: 30px;
@@ -511,7 +736,7 @@
             border: 2px solid var(--slate-100);
         }
 
-        /* ==================== TABLE ENGINEERING (The Data Core) ==================== */
+        /* ==================== TABLE ==================== */
         .table-wrapper {
             overflow-x: auto;
             border-radius: 12px;
@@ -553,7 +778,6 @@
 
         #mainTable tbody tr:hover {
             background-color: var(--blue-50);
-            cursor: pointer;
         }
 
         .row-click-highlight {
@@ -577,7 +801,7 @@
             background: var(--blue-50) !important;
         }
 
-        /* ==================== DISCLAIMER (Centered) ==================== */
+        /* ==================== DISCLAIMER ==================== */
         .disclaimer {
             margin-top: 30px;
             padding: 24px;
@@ -621,7 +845,7 @@
             }
         }
 
-        /* ==================== PRINT STYLES (PDF Export Optimization) ==================== */
+        /* ==================== PRINT STYLES ==================== */
         @media print {
             .no-print {
                 display: none !important;
@@ -649,23 +873,27 @@
             #mainTable tr {
                 page-break-inside: avoid;
             }
-
-            @page {
-                size: landscape;
-            }
         }
 
-        /* ==================== RESPONSIVE (DISABLED) ==================== */
-        /* Mobile view disabled - optimized for desktop use only */
+        /* ==================== MOBILE VIEW DISABLED ==================== */
+        /* Force desktop view on all devices */
+        body {
+            min-width: 1400px;
+            overflow-x: auto;
+        }
+        
+        .main-container {
+            min-width: 1400px;
+        }
     </style>
 </head>
 <body>
 
-<!-- ==================== AUTHENTICATION OVERLAY (The Gatekeeper) ==================== -->
+<!-- ==================== AUTHENTICATION OVERLAY ==================== -->
 <div id="authOverlay">
     <div class="auth-box">
         <h2>Wesion Secure Access</h2>
-        <p>Enter password to view 'AIA Wealth Venture' Advisor Tool</p>
+        <p>Enter password to view 'AIA Pro Achiever 3.0' Advisor Tool</p>
         <input type="password" id="passInput" placeholder="Password" autocomplete="off">
         <button class="auth-btn" onclick="checkPassword()">Unlock Access</button>
         <p id="errorMsg">密码错误 / Incorrect password.</p>
@@ -676,11 +904,11 @@
 <div class="main-container hidden" id="mainCard">
     <div class="card">
         <div id="pdfContent">
-            <!-- HEADER SECTION (Branding) -->
+            <!-- HEADER -->
             <div class="header-section">
                 <div class="header-left">
-                    <div class="confidential-tag">PRIVATE & CONFIDENTIAL - FOR INTERNAL USE ONLY</div>
-                    <h1>AIA Wealth Venture</h1>
+                    <div class="confidential-tag">STRICTLY PRIVATE & CONFIDENTIAL - FOR INTERNAL USE ONLY</div>
+                    <h1>AIA Pro Achiever 3.0</h1>
                     <div class="report-date" id="reportDate"></div>
                     <div class="client-name-group">
                         <span class="client-label">准备用于 / Prepared for:</span>
@@ -693,96 +921,270 @@
                 </div>
             </div>
 
-            <!-- INPUT ECOSYSTEM (3-Column Grid) -->
+            <!-- INPUT SECTION -->
             <div class="no-print" style="margin-bottom: 20px;">
-                <button onclick="toggleBonusInfo()" style="width: 100%; padding: 15px 20px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #bae6fd; border-radius: 12px; cursor: pointer; text-align: left; font-family: 'IBM Plex Sans', sans-serif; transition: all 0.3s; display: flex; justify-content: space-between; align-items: center;">
-                    <h3 style="color: var(--navy); font-size: 16px; font-weight: 800; margin: 0; display: flex; align-items: center; gap: 10px;">
-                        <span style="font-size: 20px;">🎁</span> AIA Wealth Venture - Product Bonuses Overview
-                    </h3>
-                    <span id="bonusToggleIcon" style="font-size: 20px; color: var(--navy); font-weight: bold;">▼</span>
+                <button class="bonus-info-toggle" onclick="toggleBonusInfo()">
+                    <span id="bonusToggleIcon">▶</span> View Bonus Structure Details (Welcome Bonus & Special Bonus)
                 </button>
-                <div id="bonusInfoContent" style="display: none; margin-top: 15px; padding: 20px; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 2px solid #bae6fd; border-top: none; border-radius: 0 0 12px 12px;">
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; font-size: 13px;">
-                        <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid var(--emerald);">
-                            <div style="font-weight: 700; color: var(--emerald); margin-bottom: 8px;">💰 Welcome Bonus (Years 1-5)</div>
-                            <div style="color: var(--slate-600); line-height: 1.6;">
-                                <strong>Premium ≥ $12,000:</strong><br>
-                                3%, 5%, 7%, 9%, 11%<br>
-                                <strong>Premium $9,000-$11,999:</strong><br>
-                                3%, 4%, 5%, 7%, 7%<br>
-                                <strong>Premium < $9,000:</strong><br>
-                                1%, 3%, 5%, 7%, 0%
+                <div id="bonusInfoPanel" class="bonus-info-panel" style="display: none;">
+                    <div class="bonus-info-grid">
+                        <!-- Welcome Bonus Section -->
+                        <div class="bonus-card">
+                            <h3>🎁 Welcome Bonus</h3>
+                            <p class="bonus-subtitle">First 3 Years Only</p>
+                            
+                            <div class="bonus-tier-group">
+                                <h4>IIP 10 Years</h4>
+                                <table class="bonus-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Premium Tier</th>
+                                            <th>Year 1</th>
+                                            <th>Year 2</th>
+                                            <th>Year 3</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>≥ $12,000</td>
+                                            <td>15%</td>
+                                            <td>18%</td>
+                                            <td>20%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$7,200 - $11,999</td>
+                                            <td>10%</td>
+                                            <td>13%</td>
+                                            <td>15%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$4,800 - $7,199</td>
+                                            <td>5%</td>
+                                            <td>8%</td>
+                                            <td>10%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$2,400 - $4,799</td>
+                                            <td>5%</td>
+                                            <td>0%</td>
+                                            <td>0%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="bonus-tier-group">
+                                <h4>IIP 15 Years</h4>
+                                <table class="bonus-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Premium Tier</th>
+                                            <th>Year 1</th>
+                                            <th>Year 2</th>
+                                            <th>Year 3</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>≥ $12,000</td>
+                                            <td>18%</td>
+                                            <td>21%</td>
+                                            <td>24%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$7,200 - $11,999</td>
+                                            <td>13%</td>
+                                            <td>16%</td>
+                                            <td>19%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$4,800 - $7,199</td>
+                                            <td>8%</td>
+                                            <td>11%</td>
+                                            <td>14%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$2,400 - $4,799</td>
+                                            <td>8%</td>
+                                            <td>0%</td>
+                                            <td>0%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="bonus-tier-group">
+                                <h4>IIP 20 Years</h4>
+                                <table class="bonus-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Premium Tier</th>
+                                            <th>Year 1</th>
+                                            <th>Year 2</th>
+                                            <th>Year 3</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>≥ $12,000</td>
+                                            <td>20%</td>
+                                            <td>25%</td>
+                                            <td>30%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$7,200 - $11,999</td>
+                                            <td>15%</td>
+                                            <td>20%</td>
+                                            <td>25%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$4,800 - $7,199</td>
+                                            <td>10%</td>
+                                            <td>15%</td>
+                                            <td>20%</td>
+                                        </tr>
+                                        <tr>
+                                            <td>$2,400 - $4,799</td>
+                                            <td>10%</td>
+                                            <td>0%</td>
+                                            <td>0%</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="bonus-example">
+                                <strong>Example:</strong> Premium $12,000 with IIP 10<br>
+                                Year 1: $1,800 | Year 2: $2,160 | Year 3: $2,400
                             </div>
                         </div>
-                        <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid var(--amber);">
-                            <div style="font-weight: 700; color: var(--amber); margin-bottom: 8px;">📈 Investment Bonus (Years 9-12)</div>
-                            <div style="color: var(--slate-600); line-height: 1.6;">
-                                <strong>2.5%</strong> of annual premium<br>
-                                Awarded each year from<br>
-                                policy year 9 to 12
+
+                        <!-- Special Bonus Section -->
+                        <div class="bonus-card">
+                            <h3>⭐ Special Bonus</h3>
+                            <p class="bonus-subtitle">From Year 10 Onwards</p>
+                            
+                            <div class="special-bonus-section">
+                                <div class="special-bonus-item">
+                                    <div class="special-bonus-header">
+                                        <span class="bonus-period">Years 10-20</span>
+                                        <span class="bonus-rate">5% of Premium</span>
+                                    </div>
+                                    <div class="bonus-examples-grid">
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$12,000 premium</div>
+                                            <div class="example-amount">= $600 / year</div>
+                                        </div>
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$7,200 premium</div>
+                                            <div class="example-amount">= $360 / year</div>
+                                        </div>
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$4,800 premium</div>
+                                            <div class="example-amount">= $240 / year</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="special-bonus-divider"></div>
+
+                                <div class="special-bonus-item">
+                                    <div class="special-bonus-header">
+                                        <span class="bonus-period">Year 21+</span>
+                                        <span class="bonus-rate">8% of Premium</span>
+                                    </div>
+                                    <div class="bonus-examples-grid">
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$12,000 premium</div>
+                                            <div class="example-amount">= $960 / year</div>
+                                        </div>
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$7,200 premium</div>
+                                            <div class="example-amount">= $576 / year</div>
+                                        </div>
+                                        <div class="bonus-example-item">
+                                            <div class="example-premium">$4,800 premium</div>
+                                            <div class="example-amount">= $384 / year</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div style="background: white; padding: 15px; border-radius: 8px; border-left: 4px solid var(--blue-500);">
-                            <div style="font-weight: 700; color: var(--blue-500); margin-bottom: 8px;">🚀 Performance Bonus (Year 9+)</div>
-                            <div style="color: var(--slate-600); line-height: 1.6;">
-                                <strong>0.3%</strong> of policy value<br>
-                                Awarded annually from<br>
-                                policy year 9 onwards
+
+                            <div class="bonus-note">
+                                <strong>💡 Note:</strong> Special bonus only applies while premiums are being paid (up to Stop Paying Age)
                             </div>
                         </div>
                     </div>
+
+                    <div class="bonus-info-footer">
+                        <p><strong>Important:</strong> All bonuses shown are non-guaranteed and subject to AIA Singapore's discretion. Bonus rates may vary based on actual policy terms and conditions.</p>
+                    </div>
                 </div>
             </div>
+
             <div class="input-container no-print">
-                <!-- 1. Policy Parameters -->
+                <!-- Policy Parameters -->
                 <div class="input-box">
-                    <div class="input-box-header">1. 保单设置 / Policy Parameters (8-Pay)</div>
+                    <div class="input-box-header">1. 保单设置 / Policy Parameters</div>
                     <div class="input-grid-2">
                         <div class="input-group">
                             <label>年缴保费 / Premium (S$)</label>
-                            <input type="number" id="premiumInput" value="10000" min="0" step="1000">
+                            <input type="number" id="premiumInput" value="12000" min="0" step="100">
                         </div>
                         <div class="input-group">
                             <label>年龄 / Entry Age</label>
-                            <input type="number" id="ageInput" value="40" min="18" max="80">
+                            <input type="number" id="ageInput" value="40" min="18" max="65">
+                        </div>
+                    </div>
+                    <div class="input-grid-2">
+                        <div class="input-group">
+                            <label>IIP (Years)</label>
+                            <select id="iipSelect">
+                                <option value="10" selected>10 Years</option>
+                                <option value="15">15 Years</option>
+                                <option value="20">20 Years</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>停止缴费年龄 / Stop Paying Age</label>
+                            <input type="number" id="stopAgeInput" value="80" min="40" max="100">
                         </div>
                     </div>
                     <div class="input-group">
                         <label>显示至年龄 / Display Until Age</label>
-                        <input type="number" id="displayUntilAge" value="80" min="50" max="100">
+                        <input type="number" id="displayUntilAge" value="100" min="50" max="100">
                     </div>
                     <div class="input-group">
                         <label>策略 / Strategy</label>
                         <select id="strategySelect">
                             <option value="reinvest">再投资 (累计) / Reinvest All</option>
-                            <option value="switch" selected>累计后收益 / Accumulate then Income</option>
+                            <option value="switch">累计后切换分红 / Accumulate then Income</option>
                             <option value="immediate">即刻提取现金 / Immediate Income</option>
                         </select>
                     </div>
-                    <div id="switchAgeGroup" class="input-group">
+                    <div id="switchAgeGroup" class="input-group hidden">
                         <label>收益开始年龄 / Income Start Age</label>
                         <input type="number" id="switchAgeInput" value="65" min="40" max="100">
                     </div>
                     
                     <button class="col-manager-btn" onclick="toggleColumnManager()">
-                        表格显示设置 / Table Column Manager ▾
+                        表格显示设置 / Table Columns ▾
                     </button>
                     <div id="colManagerContent" class="col-manager-content">
                         <label><input type="checkbox" class="col-toggle" data-col="premium" checked> Premium / 保费</label>
-                        <label><input type="checkbox" class="col-toggle" data-col="welcome" checked> Welcome Bonus / 开户奖金</label>
-                        <label><input type="checkbox" class="col-toggle" data-col="invest" checked> Investment Bonus / 投资奖金</label>
+                        <label><input type="checkbox" class="col-toggle" data-col="bonuses" checked> Bonuses / 奖金</label>
                         <label><input type="checkbox" class="col-toggle" data-col="charges" checked> Charges / 费用</label>
                     </div>
                 </div>
 
-                <!-- 2. Withdrawal Module -->
+                <!-- Withdrawal Module -->
                 <div class="input-box withdrawal-box">
                     <div class="input-box-header">2. 提取设置 / Withdrawal Module</div>
                     <table class="ls-table">
                         <thead>
                             <tr>
-                                <th>年龄 / Age</th>
-                                <th>单次提取 / Lump Sum (S$)</th>
+                                <th>年龄 Age</th>
+                                <th>单次提取 Lump Sum (S$)</th>
                                 <th style="width: 40px;"></th>
                             </tr>
                         </thead>
@@ -798,41 +1200,41 @@
                     </div>
                     <div class="input-grid-2">
                         <div class="input-group">
-                            <label>由 / From Age</label>
-                            <input type="number" id="periodicStartAge" value="65" min="40" max="100">
+                            <label>由 From Age</label>
+                            <input type="number" id="periodicStartAge" value="61" min="40" max="100">
                         </div>
                         <div class="input-group">
-                            <label>至 / To Age</label>
-                            <input type="number" id="periodicEndAge" value="85" min="40" max="100">
+                            <label>至 To Age</label>
+                            <input type="number" id="periodicEndAge" value="80" min="40" max="100">
                         </div>
                     </div>
                 </div>
 
-                <!-- 3. Market Scenarios -->
+                <!-- Market Scenarios -->
                 <div class="input-box">
                     <div class="input-box-header">3. 市场假设 / Market Scenarios</div>
                     <div class="input-group">
-                        <label>累计期增长率 / Accumulation Return (%)</label>
-                        <input type="number" id="accumGrowthRate" value="8.0" min="0" max="20" step="0.1">
+                        <label>累计期增长率 / Accumulation Growth (%)</label>
+                        <input type="number" id="accumGrowthRate" value="8" min="0" max="20" step="0.5">
                     </div>
-                    <div id="incomeGrowthGroup" class="input-group">
-                        <label>收益期增长率 / Income Return (%)</label>
-                        <input type="number" id="incomeGrowthRate" value="8.0" min="0" max="20" step="0.1">
+                    <div id="incomeGrowthGroup" class="input-group hidden">
+                        <label>收益期增长率 / Income Period Return (%)</label>
+                        <input type="number" id="incomeGrowthRate" value="5" min="0" max="20" step="0.5">
                     </div>
-                    <div id="dividendYieldGroup" class="input-group">
+                    <div id="dividendYieldGroup" class="input-group hidden">
                         <label>分红率 / Dividend Yield (%)</label>
-                        <input type="number" id="dividendYield" value="7.0" min="0" max="15" step="0.1">
+                        <input type="number" id="dividendYield" value="5.5" min="0" max="15" step="0.1">
                     </div>
                     <div class="input-group">
                         <label>手动管理费 / Manual Fund Management Charge (%)</label>
-                        <input type="number" id="fmcRate" value="1.45" min="0" max="5" step="0.01">
+                        <input type="number" id="fmcRate" value="1.45" min="0" max="5" step="0.1">
                     </div>
                     
                     <hr class="input-divider">
                     
                     <label class="comparison-toggle">
                         <input type="checkbox" id="enableComparison">
-                        开启对比模式 / Enable Comparison Mode
+                        开启对比模式 / Enable Comparison
                     </label>
                     <div id="comparisonRateGroup" class="input-group hidden">
                         <label>对比利率 / Comparison Rate (%)</label>
@@ -841,7 +1243,7 @@
                 </div>
             </div>
 
-            <!-- STATISTIC BAR (The Big Numbers) -->
+            <!-- STATS BAR -->
             <div class="stats-bar">
                 <div class="stat-card">
                     <span class="stat-label-cn">总已付保费</span>
@@ -849,8 +1251,8 @@
                     <span class="stat-value" id="statOutlay">$0</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-label-cn">账户价值</span>
-                    <span class="stat-label">Account Value</span>
+                    <span class="stat-label-cn">保单价值</span>
+                    <span class="stat-label">Policy Value</span>
                     <span class="stat-value" id="statPolicyValue">$0</span>
                 </div>
                 <div class="stat-card">
@@ -875,22 +1277,21 @@
                 </div>
             </div>
 
-            <!-- CHART DESIGN (Cumulative vs Liquid) -->
+            <!-- CHART -->
             <canvas id="mainChart"></canvas>
 
-            <!-- TABLE ENGINEERING (The Data Core) -->
+            <!-- TABLE -->
             <div class="table-wrapper">
                 <table id="mainTable">
                     <thead>
                         <tr id="tableHeaderRow">
                             <th style="width: 90px;">Year/Age<br>年份/年龄</th>
                             <th class="col-premium">Premium<br>保费</th>
-                            <th class="col-welcome">Welcome<br>Bonus<br>开户奖金</th>
-                            <th class="col-invest">Investment<br>Bonus<br>投资奖金</th>
+                            <th class="col-bonuses">Bonuses<br>奖金</th>
                             <th class="col-charges">Charges<br>费用</th>
                             <th class="col-dividend hidden">Dividend<br>分红</th>
                             <th class="col-withdrawal hidden">Withdrawal<br>提取</th>
-                            <th>Account Value<br>账户价值</th>
+                            <th class="th-policy-value">Policy Value<br>保单价值</th>
                             <th class="col-comparison hidden">Comp. Value<br>对比场景</th>
                             <th>Total Benefit<br>总利益</th>
                             <th style="width: 100px;">Return %<br>回报率</th>
@@ -900,11 +1301,10 @@
                 </table>
             </div>
 
-            <!-- DISCLAIMER (Centered) -->
+            <!-- DISCLAIMER -->
             <div class="disclaimer">
-                <strong>免责声明 / General Disclaimer:</strong><br>
-                本演示仅供参考。实际数据将根据市场表现而有所不同。请参阅保险合同了解完整条款。<br>
-                This is for illustration purposes only. Actual numbers will vary based on market performance. Refer to contract.
+                <strong>免责声明 Disclaimer:</strong> 本演示仅供参考。实际数据将根据市场表现而有所不同。请参阅保险合同了解完整条款。<br>
+                This is for illustration purposes only. Actual numbers will vary based on market performance. Please refer to the policy contract for complete terms and conditions.
             </div>
         </div>
     </div>
@@ -923,20 +1323,20 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 function setReportDate() {
+    const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     const now = new Date();
-    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-    document.getElementById('reportDate').textContent = `Analysis Date: ${now.toLocaleDateString('en-US', options)}`;
+    document.getElementById('reportDate').textContent = `Analysis Date: ${months[now.getMonth()]} ${now.getFullYear()}`;
 }
 
 function setupEventListeners() {
-    // Password input - Enter key support
+    // Password input - Enter key
     document.getElementById('passInput').addEventListener('keydown', (e) => {
         if (e.key === 'Enter') checkPassword();
     });
 
     // All input fields trigger calculation
     const inputs = [
-        'premiumInput', 'ageInput', 'displayUntilAge',
+        'premiumInput', 'ageInput', 'iipSelect', 'stopAgeInput', 'displayUntilAge',
         'strategySelect', 'switchAgeInput', 'accumGrowthRate', 'incomeGrowthRate',
         'dividendYield', 'fmcRate', 'periodicAmount', 'periodicStartAge', 'periodicEndAge',
         'comparisonRate'
@@ -980,23 +1380,22 @@ function checkPassword() {
         errorMsg.style.visibility = 'visible';
         document.getElementById('passInput').value = '';
         document.getElementById('passInput').focus();
-        setTimeout(() => {
-            errorMsg.style.visibility = 'hidden';
-        }, 3000);
     }
 }
 
 // ==================== UI CONTROLS ====================
 function toggleBonusInfo() {
-    const content = document.getElementById('bonusInfoContent');
+    const panel = document.getElementById('bonusInfoPanel');
     const icon = document.getElementById('bonusToggleIcon');
     
-    if (content.style.display === 'none' || content.style.display === '') {
-        content.style.display = 'block';
-        icon.textContent = '▲';
-    } else {
-        content.style.display = 'none';
+    if (panel.style.display === 'none') {
+        panel.style.display = 'block';
+        icon.classList.add('expanded');
         icon.textContent = '▼';
+    } else {
+        panel.style.display = 'none';
+        icon.classList.remove('expanded');
+        icon.textContent = '▶';
     }
 }
 
@@ -1008,15 +1407,15 @@ function toggleColumnManager() {
 function updateStrategyVisibility() {
     const strategy = document.getElementById('strategySelect').value;
     
-    // Income Return %: Only visible when "Accumulate then Income" is selected
+    // Show/hide income growth rate
     const incomeGroup = document.getElementById('incomeGrowthGroup');
     incomeGroup.classList.toggle('hidden', strategy !== 'switch');
     
-    // Dividend Yield %: Visible only for "Accumulate then Income" or "Immediate Income"
+    // Show/hide dividend yield
     const dividendGroup = document.getElementById('dividendYieldGroup');
     dividendGroup.classList.toggle('hidden', strategy === 'reinvest');
     
-    // Switch age: Only for "Accumulate then Income"
+    // Show/hide switch age
     const switchGroup = document.getElementById('switchAgeGroup');
     switchGroup.classList.toggle('hidden', strategy !== 'switch');
 }
@@ -1033,11 +1432,12 @@ function updateColumnVisibility() {
         const colName = toggle.dataset.col;
         const isChecked = toggle.checked;
         
-        // Update table header and body cells
+        // Update table header
         document.querySelectorAll(`.col-${colName}`).forEach(el => {
             el.classList.toggle('hidden', !isChecked);
         });
         
+        // Update table body cells
         document.querySelectorAll(`.td-${colName}`).forEach(el => {
             el.classList.toggle('hidden', !isChecked);
         });
@@ -1049,8 +1449,8 @@ function addLumpSum() {
     const row = tbody.insertRow();
     
     row.innerHTML = `
-        <td><input type="number" class="ls-age" value="50" min="40" max="100"></td>
-        <td><input type="number" class="ls-amount" value="10000" min="0" step="1000"></td>
+        <td><input type="number" class="ls-age" value="65" min="40" max="100"></td>
+        <td><input type="number" class="ls-amount" value="50000" min="0" step="1000"></td>
         <td><button class="ls-delete-btn" onclick="deleteLumpSum(this)">×</button></td>
     `;
     
@@ -1068,19 +1468,21 @@ function deleteLumpSum(button) {
 }
 
 function clearAllData() {
-    // Clear All shouldn't trigger password re-entry
-    document.getElementById('premiumInput').value = 10000;
+    // Reset all inputs to default values
+    document.getElementById('premiumInput').value = 12000;
     document.getElementById('ageInput').value = 40;
-    document.getElementById('displayUntilAge').value = 80;
-    document.getElementById('strategySelect').value = 'switch';
+    document.getElementById('iipSelect').value = '10';
+    document.getElementById('stopAgeInput').value = 80;
+    document.getElementById('displayUntilAge').value = 100;
+    document.getElementById('strategySelect').value = 'reinvest';
     document.getElementById('switchAgeInput').value = 65;
-    document.getElementById('accumGrowthRate').value = 8.0;
-    document.getElementById('incomeGrowthRate').value = 8.0;
-    document.getElementById('dividendYield').value = 7.0;
+    document.getElementById('accumGrowthRate').value = 8;
+    document.getElementById('incomeGrowthRate').value = 5;
+    document.getElementById('dividendYield').value = 5.5;
     document.getElementById('fmcRate').value = 1.45;
     document.getElementById('periodicAmount').value = 0;
-    document.getElementById('periodicStartAge').value = 65;
-    document.getElementById('periodicEndAge').value = 85;
+    document.getElementById('periodicStartAge').value = 61;
+    document.getElementById('periodicEndAge').value = 80;
     document.getElementById('enableComparison').checked = false;
     document.getElementById('comparisonRate').value = 1.5;
     document.getElementById('clientName').value = 'VALUED CLIENT';
@@ -1094,21 +1496,85 @@ function clearAllData() {
     calculateProjection();
 }
 
-// ==================== MAIN CALCULATION - AWV FORMULAS ====================
+// ==================== SURRENDER CHARGE CALCULATION ====================
+function getSurrenderChargeRate(year, iip) {
+    // Get surrender charge rate based on year and IIP period
+    const schedules = {
+        '10': {
+            1: 1.00, 2: 1.00, 3: 0.80, 4: 0.70, 5: 0.60,
+            6: 0.50, 7: 0.45, 8: 0.35, 9: 0.20, 10: 0.05
+        },
+        '15': {
+            1: 1.00, 2: 1.00, 3: 1.00, 4: 0.85, 5: 0.75,
+            6: 0.65, 7: 0.55, 8: 0.45, 9: 0.35, 10: 0.25,
+            11: 0.20, 12: 0.15, 13: 0.10, 14: 0.05, 15: 0.05
+        },
+        '20': {
+            1: 1.00, 2: 1.00, 3: 1.00, 4: 1.00, 5: 0.90,
+            6: 0.80, 7: 0.70, 8: 0.60, 9: 0.50, 10: 0.40,
+            11: 0.35, 12: 0.30, 13: 0.25, 14: 0.20, 15: 0.15,
+            16: 0.10, 17: 0.10, 18: 0.05, 19: 0.05, 20: 0.05
+        }
+    };
+    
+    const schedule = schedules[iip] || schedules['10'];
+    return schedule[year] || 0;
+}
+
+// ==================== BONUS CALCULATION ====================
+function getWelcomeBonus(premium, iip, year) {
+    if (year > 3) return 0;
+    
+    const bonusTiers = {
+        '10': [
+            [12000, 0.15, 0.18, 0.20],
+            [7200, 0.10, 0.13, 0.15],
+            [4800, 0.05, 0.08, 0.10],
+            [2400, 0.05, 0, 0]
+        ],
+        '15': [
+            [12000, 0.18, 0.21, 0.24],
+            [7200, 0.13, 0.16, 0.19],
+            [4800, 0.08, 0.11, 0.14],
+            [2400, 0.08, 0, 0]
+        ],
+        '20': [
+            [12000, 0.20, 0.25, 0.30],
+            [7200, 0.15, 0.20, 0.25],
+            [4800, 0.10, 0.15, 0.20],
+            [2400, 0.10, 0, 0]
+        ]
+    };
+    
+    const tiers = bonusTiers[iip] || bonusTiers['10'];
+    const tier = tiers.find(t => premium >= t[0]);
+    
+    return tier ? tier[year] : 0;
+}
+
+function getSpecialBonus(premium, year) {
+    if (year < 10) return 0;
+    if (year <= 20) return premium * 0.05;
+    return premium * 0.08;
+}
+
+// ==================== MAIN CALCULATION ====================
 function calculateProjection() {
     // Get all inputs
     const premium = parseFloat(document.getElementById('premiumInput').value) || 0;
     const startAge = parseInt(document.getElementById('ageInput').value) || 40;
+    const iip = document.getElementById('iipSelect').value;
+    const stopAge = parseInt(document.getElementById('stopAgeInput').value) || 80;
     const displayUntil = parseInt(document.getElementById('displayUntilAge').value) || 100;
     const strategy = document.getElementById('strategySelect').value;
     const switchAge = parseInt(document.getElementById('switchAgeInput').value) || 65;
     const accumRate = parseFloat(document.getElementById('accumGrowthRate').value) / 100 || 0.08;
-    const incomeRate = parseFloat(document.getElementById('incomeGrowthRate').value) / 100 || 0.08;
-    const divYield = parseFloat(document.getElementById('dividendYield').value) / 100 || 0.07;
+    const incomeRate = parseFloat(document.getElementById('incomeGrowthRate').value) / 100 || 0.05;
+    const divYield = parseFloat(document.getElementById('dividendYield').value) / 100 || 0.055;
     const fmc = parseFloat(document.getElementById('fmcRate').value) / 100 || 0.0145;
     const periodicAmt = parseFloat(document.getElementById('periodicAmount').value) || 0;
-    const periodicStart = parseInt(document.getElementById('periodicStartAge').value) || 65;
-    const periodicEnd = parseInt(document.getElementById('periodicEndAge').value) || 85;
+    const periodicStart = parseInt(document.getElementById('periodicStartAge').value) || 61;
+    const periodicEnd = parseInt(document.getElementById('periodicEndAge').value) || 80;
     const compEnabled = document.getElementById('enableComparison').checked;
     const compRate = parseFloat(document.getElementById('comparisonRate').value) / 100 || 0.015;
 
@@ -1118,23 +1584,9 @@ function calculateProjection() {
         const age = parseInt(row.querySelector('.ls-age').value);
         const amount = parseFloat(row.querySelector('.ls-amount').value) || 0;
         if (age && amount > 0) {
-            lumpSums[age] = (lumpSums[age] || 0) + amount;
+            lumpSums[age] = amount;
         }
     });
-
-    // Net growth rates (growth minus FMC)
-    const netAccumRate = accumRate - fmc;
-    const netIncomeRate = incomeRate - fmc;
-
-    // Welcome bonus tiers based on AIA AWV
-    let welcomeBonus = [0, 0, 0, 0, 0];
-    if (premium >= 12000) {
-        welcomeBonus = [0.03, 0.05, 0.07, 0.09, 0.11];
-    } else if (premium >= 9000) {
-        welcomeBonus = [0.03, 0.04, 0.05, 0.07, 0.07];
-    } else {
-        welcomeBonus = [0.01, 0.03, 0.05, 0.07, 0];
-    }
 
     // Initialize tracking variables
     let policyValue = 0;
@@ -1155,77 +1607,89 @@ function calculateProjection() {
 
     // Table HTML
     let tableHTML = '';
+    
+    // Track if policy value differs from total benefit
+    let policyValueDifferent = false;
 
-    // Calculate year by year (Display Until Age option)
-    const maxYears = Math.min(displayUntil - startAge, 60);
+    // Calculate year by year
+    const maxYears = displayUntil - startAge;
     
     for (let year = 1; year <= maxYears && !terminated; year++) {
         const currentAge = startAge + year;
         
-        // Premium payment (years 1-8 only for AWV - 8-Pay)
-        const yearPremium = year <= 8 ? premium : 0;
+        // Premium payment
+        const yearPremium = currentAge <= stopAge ? premium : 0;
         totalPremiumPaid += yearPremium;
         policyValue += yearPremium;
         comparisonValue = (comparisonValue + yearPremium) * (1 + compRate);
 
-        // Welcome bonus (years 1-5 only)
-        const welcome = (year <= 5) ? premium * welcomeBonus[year - 1] : 0;
-        policyValue += welcome;
+        // Welcome bonus (first 3 years)
+        const welcomeBonus = (year <= 3 && currentAge <= stopAge) 
+            ? Math.floor(premium * getWelcomeBonus(premium, iip, year)) 
+            : 0;
 
-        // Investment bonus (years 9-12, 2.5% of annual premium)
-        const investBonus = (year >= 9 && year <= 12) ? premium * 0.025 : 0;
-        
-        // Performance bonus (year 9 onwards, 0.3% of policy value)
-        const perfBonus = (year >= 9) ? policyValue * 0.003 : 0;
-        
-        policyValue += investBonus + perfBonus;
-        const totalInvestBonus = investBonus + perfBonus;
+        // Special bonus (from year 10)
+        const specialBonus = (currentAge <= stopAge && year >= 10) 
+            ? Math.floor(getSpecialBonus(premium, year)) 
+            : 0;
 
-        // Apply net growth (already includes FMC deduction)
-        const inIncomePhase = (strategy === 'switch' && currentAge >= switchAge) || strategy === 'immediate';
-        const growthRate = inIncomePhase ? netIncomeRate : netAccumRate;
-        
-        policyValue *= (1 + growthRate);
+        const totalBonus = welcomeBonus + specialBonus;
+        policyValue += totalBonus;
 
-        // Supplementary charges (years 1-10, 3.6% of policy value after growth)
-        const suppCharge = year <= 10 ? policyValue * 0.036 : 0;
+        // Growth - Apply FULL growth rate, then deduct FMC separately
+        const growthRate = (strategy === 'switch' && currentAge >= switchAge) ? incomeRate : accumRate;
+        policyValue = policyValue * (1 + growthRate);
+        
+        // Deduct FMC as separate charge
+        policyValue = policyValue * (1 - fmc);
+
+        // Supplementary charge (first 10 years)
+        const suppCharge = year <= 10 ? Math.ceil(policyValue * 0.039) : 0;
         policyValue -= suppCharge;
 
-        // Dividends - Dividend and Withdrawal now have their own dedicated columns
+        // Dividends
         let yearDividend = 0;
         if (strategy !== 'reinvest') {
             if (strategy === 'immediate' || (strategy === 'switch' && currentAge >= switchAge)) {
-                yearDividend = policyValue * divYield;
+                yearDividend = Math.floor(policyValue * divYield);
                 policyValue -= yearDividend;
                 totalDividends += yearDividend;
-                if (yearDividend > 0) hasDividendData = true;
+                hasDividendData = true;
             }
         }
 
-        // Withdrawals - separate from dividends
+        // Withdrawals
         let yearWithdrawal = 0;
-        if (lumpSums[currentAge]) yearWithdrawal += lumpSums[currentAge];
+        
+        // Lump sum withdrawal
+        if (lumpSums[currentAge]) {
+            yearWithdrawal += lumpSums[currentAge];
+        }
+        
+        // Periodic withdrawal
         if (currentAge >= periodicStart && currentAge <= periodicEnd) {
             yearWithdrawal += periodicAmt;
         }
 
         if (yearWithdrawal > 0) {
             hasWithdrawalData = true;
-            yearWithdrawal = Math.min(yearWithdrawal, policyValue);
-            policyValue -= yearWithdrawal;
+            if (policyValue - yearWithdrawal <= 0) {
+                yearWithdrawal = policyValue;
+                policyValue = 0;
+                terminated = true;
+            } else {
+                policyValue -= yearWithdrawal;
+            }
             totalWithdrawals += yearWithdrawal;
         }
 
-        // Check for termination
-        if (policyValue <= 0) {
-            terminated = true;
-            policyValue = 0;
-        }
+        // Round policy value to nearest 100 at end of year (matches PDF methodology)
+        policyValue = Math.round(policyValue / 100) * 100;
 
-        // Round values for display (round to nearest 100 as AIA does)
-        const displayPolicyValue = Math.round(policyValue / 100) * 100;
-        const displayTotalBenefit = Math.round((policyValue + totalDividends + totalWithdrawals) / 100) * 100;
-        const displayCompValue = Math.round(comparisonValue / 100) * 100;
+        // Round values for display
+        const displayPolicyValue = Math.floor(policyValue / 100) * 100;
+        const displayTotalBenefit = Math.floor((policyValue + totalDividends + totalWithdrawals) / 100) * 100;
+        const displayCompValue = Math.floor(comparisonValue / 100) * 100;
         const returnPct = totalPremiumPaid > 0 ? Math.round((displayTotalBenefit / totalPremiumPaid) * 100) : 0;
 
         // Store chart data
@@ -1235,27 +1699,39 @@ function calculateProjection() {
         chartOutlays.push(totalPremiumPaid);
         chartCompValues.push(displayCompValue);
 
-        // Generate table row with Click-to-highlight functionality
+        // Check if policy value equals total benefit (for column hiding)
+        if (displayPolicyValue !== displayTotalBenefit) {
+            policyValueDifferent = true;
+        }
+
+        // Generate table row
         const isHighlightRow = (strategy === 'switch' && currentAge === switchAge);
         tableHTML += `
             <tr class="${isHighlightRow ? 'highlight-switch' : ''}" onclick="this.classList.toggle('row-click-highlight')">
-                <td style="font-weight:700;color:var(--navy)">${year}/${currentAge}</td>
-                <td class="td-premium" style="color:var(--navy);font-weight:600">${formatCurrency(yearPremium)}</td>
-                <td class="td-welcome" style="color:var(--emerald);font-weight:600">${formatCurrency(welcome)}</td>
-                <td class="td-invest" style="color:var(--emerald);font-weight:600">${formatCurrency(totalInvestBonus)}</td>
+                <td style="font-weight:700">${year}/${currentAge}</td>
+                <td class="td-premium">${formatCurrency(yearPremium)}</td>
+                <td class="td-bonuses">${formatCurrency(totalBonus)}</td>
                 <td class="td-charges" style="color:var(--aia-red)">-${formatCurrency(suppCharge)}</td>
                 <td class="col-dividend" style="color:var(--emerald);font-weight:600">${formatCurrency(yearDividend)}</td>
                 <td class="col-withdrawal" style="color:var(--amber);font-weight:600">${formatCurrency(yearWithdrawal)}</td>
-                <td style="font-weight:700;color:var(--aia-red)">${formatCurrency(displayPolicyValue)}</td>
+                <td class="col-policy-value" style="font-weight:600">${formatCurrency(displayPolicyValue)}</td>
                 <td class="col-comparison comp-col">${formatCurrency(displayCompValue)}</td>
                 <td class="total-benefit-col">${formatCurrency(displayTotalBenefit)}</td>
-                <td style="font-weight:700;color:var(--navy)">${terminated ? '❌ Term.' : returnPct + '%'}</td>
+                <td style="font-weight:700;color:var(--navy)">${terminated ? '❌ Terminated' : returnPct + '%'}</td>
             </tr>
         `;
     }
 
     // Update table
     document.getElementById('tableBody').innerHTML = tableHTML;
+
+    // Hide/show Policy Value column based on whether it differs from Total Benefit
+    document.querySelectorAll('.col-policy-value').forEach(el => {
+        el.classList.toggle('hidden', !policyValueDifferent);
+    });
+    document.querySelectorAll('.th-policy-value').forEach(el => {
+        el.classList.toggle('hidden', !policyValueDifferent);
+    });
 
     // Update stats
     const finalPolicyValue = chartPolicyValues[chartPolicyValues.length - 1] || 0;
@@ -1269,49 +1745,49 @@ function calculateProjection() {
     document.getElementById('statTotalBenefit').textContent = formatCurrency(finalTotalBenefit);
     document.getElementById('statMultiplier').textContent = multiplier + 'x';
 
-    // Smart Auto-Hide: These columns will only appear if there is a non-zero value
+    // Hide stat cards with $0 values
+    const statCards = document.querySelectorAll('.stat-card');
+    statCards[2].style.display = totalDividends > 0 ? 'block' : 'none'; // Dividends
+    statCards[3].style.display = totalWithdrawals > 0 ? 'block' : 'none'; // Withdrawals
+
+    // Update column visibility
     document.querySelectorAll('.col-dividend').forEach(el => {
         el.classList.toggle('hidden', !hasDividendData);
     });
     document.querySelectorAll('.col-withdrawal').forEach(el => {
         el.classList.toggle('hidden', !hasWithdrawalData);
     });
-    
-    // Comparison Mode: When enabled, new line in chart and column in table
     document.querySelectorAll('.col-comparison').forEach(el => {
         el.classList.toggle('hidden', !compEnabled);
     });
 
     updateColumnVisibility();
-    updateChart(chartLabels, chartPolicyValues, chartTotalBenefits, chartOutlays, chartCompValues, compEnabled, hasDividendData || hasWithdrawalData);
+    updateChart(chartLabels, chartPolicyValues, chartTotalBenefits, chartOutlays, chartCompValues, compEnabled, policyValueDifferent);
 }
 
-// ==================== CHART DESIGN (Cumulative vs Liquid) ====================
-function updateChart(labels, policyValues, totalBenefits, outlays, compValues, showComparison, hasPayouts) {
+// ==================== CHART ====================
+function updateChart(labels, policyValues, totalBenefits, outlays, compValues, showComparison, showPolicyValue) {
     const ctx = document.getElementById('mainChart');
     
     if (chartInstance) {
         chartInstance.destroy();
     }
 
-    // If policy value = total benefit, only show total benefit
-    const valuesAreSame = !hasPayouts;
-
     const datasets = [];
 
-    // Only show separate lines if they differ
-    if (!valuesAreSame) {
-        // Total Benefit (Solid Emerald with fill)
-        datasets.push({
-            label: 'Total Benefit (总利益)',
-            data: totalBenefits,
-            borderColor: '#10b981',
-            backgroundColor: 'rgba(16, 185, 129, 0.08)',
-            fill: true,
-            tension: 0.3,
-            borderWidth: 3
-        });
-        // Policy Value (Dashed Red)
+    // Always show Total Benefit
+    datasets.push({
+        label: 'Total Benefit (总利益)',
+        data: totalBenefits,
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16, 185, 129, 0.05)',
+        fill: true,
+        tension: 0.3,
+        borderWidth: 3
+    });
+
+    // Only show Policy Value if it differs from Total Benefit
+    if (showPolicyValue) {
         datasets.push({
             label: 'Policy Value (保单价值)',
             data: policyValues,
@@ -1321,31 +1797,18 @@ function updateChart(labels, policyValues, totalBenefits, outlays, compValues, s
             tension: 0.3,
             borderWidth: 2
         });
-    } else {
-        // Combined line when values are same
-        datasets.push({
-            label: 'Total Benefit / Policy Value',
-            data: policyValues,
-            borderColor: '#d31145',
-            backgroundColor: 'rgba(211, 17, 69, 0.05)',
-            fill: true,
-            tension: 0.3,
-            borderWidth: 3
-        });
     }
 
-    // Total Outlay (Dotted Navy)
     datasets.push({
         label: 'Total Outlay (本金)',
         data: outlays,
-        borderColor: '#2c3e50',
+        borderColor: '#334155',
         borderDash: [8, 4],
         pointRadius: 0,
         tension: 0,
         borderWidth: 2
     });
 
-    // Comparison (Blue dashed) - Comparison Tool
     if (showComparison) {
         datasets.push({
             label: 'Comparison (对比)',
@@ -1385,7 +1848,7 @@ function updateChart(labels, policyValues, totalBenefits, outlays, compValues, s
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(44, 62, 80, 0.95)',
+                    backgroundColor: 'rgba(26, 35, 50, 0.95)',
                     titleFont: {
                         family: 'IBM Plex Sans',
                         size: 13,
@@ -1442,13 +1905,12 @@ function formatCurrency(value) {
     return '$' + Math.round(value).toLocaleString('en-US');
 }
 
-// ==================== PDF EXPORT (Landscape Orientation) ====================
+// ==================== PDF EXPORT ====================
 function downloadPDF() {
     const element = document.getElementById('pdfContent');
-    const clientName = document.getElementById('clientName').value.replace(/\s+/g, '_') || 'Client';
     const opt = {
         margin: [10, 10, 10, 10],
-        filename: `AWV_Analysis_${clientName}.pdf`,
+        filename: 'AIA_Pro_Achiever_3.0_Analysis.pdf',
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: { scale: 2, useCORS: true },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
