@@ -726,16 +726,6 @@
             margin-top: 6px;
         }
 
-        /* ==================== CHART ==================== */
-        #mainChart {
-            max-height: 350px;
-            margin-bottom: 30px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            border: 2px solid var(--slate-100);
-        }
-
         /* ==================== TABLE ==================== */
         .table-wrapper {
             overflow-x: auto;
@@ -854,24 +844,144 @@
             body {
                 background: white;
                 padding: 0;
+                margin: 0;
+                min-width: auto;
+            }
+            
+            .main-container {
+                min-width: auto;
+                max-width: 100%;
             }
             
             .card {
                 box-shadow: none;
                 border: none;
-                padding: 20px;
+                padding: 15px;
+                page-break-after: auto;
+            }
+
+            .header-section {
+                page-break-after: avoid;
+                border-bottom: 2px solid var(--aia-red);
+                margin-bottom: 15px;
+            }
+
+            .stats-bar {
+                page-break-inside: avoid;
+                page-break-after: avoid;
+                margin-bottom: 15px;
+                grid-template-columns: repeat(6, 1fr);
+                gap: 8px;
+            }
+
+            .stat-card {
+                padding: 12px;
+                font-size: 11px;
             }
 
             #mainChart {
                 page-break-inside: avoid;
+                page-break-after: avoid;
+                max-height: 280px !important;
+                margin-bottom: 15px;
+                display: block !important;
+                visibility: visible !important;
+            }
+
+            /* Ensure chart container is visible */
+            canvas {
+                display: block !important;
+                max-width: 100% !important;
             }
 
             .table-wrapper {
                 page-break-inside: auto;
+                border: 1px solid var(--slate-300);
+                margin-bottom: 15px;
+            }
+
+            #mainTable {
+                font-size: 9px;
+                width: 100%;
+            }
+
+            #mainTable thead {
+                display: table-header-group;
+            }
+
+            #mainTable tbody {
+                display: table-row-group;
             }
 
             #mainTable tr {
                 page-break-inside: avoid;
+                page-break-after: auto;
+            }
+
+            #mainTable thead th {
+                padding: 6px 3px;
+                font-size: 8px;
+                white-space: nowrap;
+            }
+
+            #mainTable tbody td {
+                padding: 5px 3px;
+                font-size: 8.5px;
+                white-space: nowrap;
+            }
+            
+            /* Ensure columns don't break */
+            .table-wrapper {
+                overflow: visible !important;
+                page-break-before: always;
+                margin-top: 0;
+            }
+            
+            /* Better page break control */
+            .stats-bar {
+                page-break-inside: avoid !important;
+                page-break-after: avoid !important;
+            }
+            
+            .stat-card {
+                page-break-inside: avoid !important;
+                min-height: 90px;
+            }
+            
+            /* Chart container */
+            #mainChart, 
+            #mainChart + div,
+            canvas {
+                page-break-inside: avoid !important;
+                page-break-after: avoid !important;
+            }
+            
+            /* Input section */
+            .input-container {
+                page-break-after: avoid !important;
+            }
+            
+            /* Disclaimer stays at end */
+            .disclaimer {
+                page-break-before: avoid !important;
+                margin-top: 20px;
+            }
+
+            .disclaimer {
+                page-break-inside: avoid;
+                font-size: 9px;
+                padding: 12px;
+                margin-top: 15px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            /* Force landscape orientation */
+            @page {
+                size: A3 landscape;
+                margin: 10mm;
             }
         }
 
@@ -917,7 +1027,8 @@
                 </div>
                 <div class="header-actions no-print">
                     <button class="btn btn-secondary" onclick="clearAllData()">Clear All</button>
-                    <button class="btn btn-primary" onclick="downloadPDF()">Download Report</button>
+                    <button class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
+                    <button class="btn btn-secondary" onclick="printReport()" title="Alternative for mobile devices">Print Report</button>
                 </div>
             </div>
 
@@ -1278,10 +1389,12 @@
             </div>
 
             <!-- CHART -->
-            <canvas id="mainChart"></canvas>
+            <div style="background: white; padding: 20px; border-radius: 12px; border: 2px solid var(--slate-100); margin-bottom: 30px; height: 400px; position: relative;">
+                <canvas id="mainChart" style="max-height: 350px; width: 100% !important; height: 350px !important;"></canvas>
+            </div>
 
             <!-- TABLE -->
-            <div class="table-wrapper">
+            <div class="table-wrapper page-break-before">
                 <table id="mainTable">
                     <thead>
                         <tr id="tableHeaderRow">
@@ -1345,6 +1458,11 @@ function setupEventListeners() {
     inputs.forEach(id => {
         const element = document.getElementById(id);
         if (element) {
+            // Remove any existing listeners to prevent duplicates
+            element.removeEventListener('input', handleInputChange);
+            element.removeEventListener('change', handleInputChange);
+            
+            // Add new listeners
             element.addEventListener('input', handleInputChange);
             element.addEventListener('change', handleInputChange);
         }
@@ -1834,6 +1952,9 @@ function updateChart(labels, policyValues, totalBenefits, outlays, compValues, s
                 mode: 'index',
                 intersect: false
             },
+            animation: {
+                duration: 750
+            },
             plugins: {
                 legend: {
                     position: 'bottom',
@@ -1905,19 +2026,249 @@ function formatCurrency(value) {
     return '$' + Math.round(value).toLocaleString('en-US');
 }
 
-// ==================== PDF EXPORT ====================
-function downloadPDF() {
-    const element = document.getElementById('pdfContent');
-    const opt = {
-        margin: [10, 10, 10, 10],
-        filename: 'AIA_Pro_Achiever_3.0_Analysis.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
-    };
-    
-    html2pdf().set(opt).from(element).save();
+// ==================== DEVICE DETECTION ====================
+function isMobileDevice() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
+           (navigator.maxTouchPoints && navigator.maxTouchPoints > 2);
 }
+
+// ==================== PDF EXPORT ====================
+async function downloadPDF() {
+    // Check if mobile device - use print instead
+    if (isMobileDevice()) {
+        const usePrint = confirm('For best results on mobile devices, use "Print Report" instead.\n\nClick OK to print, or Cancel to try PDF download anyway.');
+        if (usePrint) {
+            printReport();
+            return;
+        }
+    }
+    
+    // Show loading indicator
+    const btn = event.target;
+    const originalText = btn.textContent;
+    btn.textContent = 'Preparing PDF...';
+    btn.disabled = true;
+    
+    try {
+        // Force recalculation to ensure chart is current
+        calculateProjection();
+        
+        // Wait for chart to fully render
+        btn.textContent = 'Rendering chart...';
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        // Get the canvas and convert to image BEFORE cloning
+        const chartCanvas = document.getElementById('mainChart');
+        const chartImage = chartCanvas.toDataURL('image/png', 1.0);
+        
+        btn.textContent = 'Optimizing layout...';
+        
+        // Clone the content
+        const element = document.getElementById('pdfContent');
+        const clonedElement = element.cloneNode(true);
+        
+        // Replace the canvas with an image in the clone
+        const clonedCanvas = clonedElement.querySelector('#mainChart');
+        const chartContainer = clonedCanvas ? clonedCanvas.parentNode : null;
+        if (clonedCanvas && chartImage && chartContainer) {
+            const img = document.createElement('img');
+            img.src = chartImage;
+            img.style.width = '100%';
+            img.style.height = '250px'; // Optimized height
+            img.style.maxHeight = '250px';
+            img.style.display = 'block';
+            img.style.margin = '0';
+            chartContainer.replaceChild(img, clonedCanvas);
+            chartContainer.style.pageBreakInside = 'avoid';
+            chartContainer.style.pageBreakAfter = 'avoid';
+            chartContainer.style.marginBottom = '10px'; // Reduced spacing
+        }
+        
+        // Optimize stats bar layout for PDF
+        const statsBar = clonedElement.querySelector('.stats-bar');
+        if (statsBar) {
+            statsBar.style.display = 'grid';
+            statsBar.style.gridTemplateColumns = 'repeat(5, 1fr)';
+            statsBar.style.gap = '8px';
+            statsBar.style.marginBottom = '15px'; // Reduced spacing
+            statsBar.style.pageBreakInside = 'avoid';
+            statsBar.style.pageBreakAfter = 'avoid';
+            
+            // Optimize stat cards
+            const statCards = statsBar.querySelectorAll('.stat-card');
+            statCards.forEach(card => {
+                card.style.padding = '10px'; // More compact
+                card.style.minHeight = '85px';
+                card.style.display = 'flex';
+                card.style.flexDirection = 'column';
+                card.style.justifyContent = 'center';
+            });
+        }
+        
+        // Optimize input section spacing
+        const inputSection = clonedElement.querySelector('.input-container');
+        if (inputSection) {
+            inputSection.style.marginBottom = '15px'; // Reduced
+            inputSection.style.pageBreakAfter = 'avoid';
+        }
+        
+        const inputBoxes = clonedElement.querySelectorAll('.input-box');
+        inputBoxes.forEach(box => {
+            box.style.padding = '12px'; // More compact
+            box.style.marginBottom = '10px';
+        });
+        
+        // Optimize table wrapper - minimize white space
+        const tableWrapper = clonedElement.querySelector('.table-wrapper');
+        if (tableWrapper) {
+            tableWrapper.style.marginTop = '5px'; // Minimal gap
+            tableWrapper.style.marginBottom = '15px';
+        }
+        
+        // Optimize table for PDF - MAXIMUM DENSITY
+        const clonedTable = clonedElement.querySelector('#mainTable');
+        if (clonedTable) {
+            clonedTable.style.fontSize = '7.5px'; // Smaller for more rows per page
+            clonedTable.style.width = '100%';
+            clonedTable.style.borderCollapse = 'collapse';
+            
+            const headerCells = clonedTable.querySelectorAll('thead th');
+            headerCells.forEach(cell => {
+                cell.style.padding = '5px 3px'; // Tighter
+                cell.style.fontSize = '7px';
+                cell.style.whiteSpace = 'nowrap';
+                cell.style.fontWeight = '700';
+                cell.style.lineHeight = '1.1';
+            });
+            
+            const bodyCells = clonedTable.querySelectorAll('tbody td');
+            bodyCells.forEach(cell => {
+                cell.style.padding = '4px 3px'; // Tighter
+                cell.style.fontSize = '7.5px';
+                cell.style.whiteSpace = 'nowrap';
+                cell.style.lineHeight = '1.2';
+            });
+        }
+        
+        // Add page footer with page numbers
+        const disclaimer = clonedElement.querySelector('.disclaimer');
+        if (disclaimer) {
+            disclaimer.style.pageBreakBefore = 'avoid';
+            disclaimer.style.marginTop = '20px';
+            
+            // Add footer text
+            const footer = document.createElement('div');
+            footer.style.textAlign = 'center';
+            footer.style.fontSize = '9px';
+            footer.style.color = '#64748b';
+            footer.style.marginTop = '15px';
+            footer.style.paddingTop = '10px';
+            footer.style.borderTop = '1px solid #e2e8f0';
+            footer.innerHTML = `Generated by Wesion Wealth Calculator • ${new Date().toLocaleDateString('en-SG', { year: 'numeric', month: 'long', day: 'numeric' })}`;
+            disclaimer.parentNode.insertBefore(footer, disclaimer.nextSibling);
+        }
+        
+        // Optimize header section
+        const headerSection = clonedElement.querySelector('.header-section');
+        if (headerSection) {
+            headerSection.style.pageBreakAfter = 'avoid';
+            headerSection.style.marginBottom = '20px';
+        }
+        
+        // Create temporary container
+        const tempContainer = document.createElement('div');
+        tempContainer.style.position = 'absolute';
+        tempContainer.style.left = '-9999px';
+        tempContainer.style.top = '0';
+        tempContainer.style.width = '1650px';
+        tempContainer.style.padding = '0';
+        tempContainer.style.backgroundColor = 'white';
+        document.body.appendChild(tempContainer);
+        tempContainer.appendChild(clonedElement);
+        
+        btn.textContent = 'Generating PDF...';
+        
+        // PDF options optimized for perfect output
+        const opt = {
+            margin: [7, 7, 7, 7],
+            filename: `AIA_Pro_Achiever_3.0_Analysis_${new Date().toISOString().split('T')[0]}.pdf`,
+            image: { 
+                type: 'jpeg', 
+                quality: 0.96 
+            },
+            html2canvas: { 
+                scale: 1.6, // Balanced for quality + density
+                useCORS: true,
+                logging: false,
+                allowTaint: true,
+                width: 1650,
+                windowWidth: 1650,
+                scrollY: 0,
+                scrollX: 0,
+                imageTimeout: 0,
+                removeContainer: true,
+                backgroundColor: '#ffffff'
+            },
+            jsPDF: { 
+                unit: 'mm', 
+                format: [420, 297], // A3 landscape
+                orientation: 'landscape',
+                compress: true,
+                putOnlyUsedFonts: true
+            },
+            pagebreak: { 
+                mode: ['avoid-all', 'css'],
+                avoid: '.stats-bar, .pdf-chart-section'
+            }
+        };
+        
+        // Generate PDF with page numbers
+        const pdf = html2pdf().set(opt).from(clonedElement);
+        const pdfResult = await pdf.toPdf().get('pdf');
+        const totalPages = pdfResult.internal.getNumberOfPages();
+        
+        // Add page numbers to each page
+        for (let i = 1; i <= totalPages; i++) {
+            pdfResult.setPage(i);
+            pdfResult.setFontSize(8);
+            pdfResult.setTextColor(100, 116, 139);
+            pdfResult.text(
+                `Page ${i} of ${totalPages}`,
+                pdfResult.internal.pageSize.getWidth() / 2,
+                pdfResult.internal.pageSize.getHeight() - 4,
+                { align: 'center' }
+            );
+        }
+        
+        // Save the PDF
+        pdfResult.save(`AIA_Pro_Achiever_3.0_Analysis_${new Date().toISOString().split('T')[0]}.pdf`);
+        
+        // Clean up
+        document.body.removeChild(tempContainer);
+        
+        // Reset button
+        btn.textContent = originalText;
+        btn.disabled = false;
+        
+    } catch (error) {
+        console.error('PDF generation error:', error);
+        alert('PDF generation failed. Please try using "Print Report" instead (works better on mobile/tablet).');
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
+
+// ==================== PRINT FUNCTION (MOBILE-FRIENDLY ALTERNATIVE) ====================
+function printReport() {
+    // Force recalculation and chart update
+    calculateProjection();
+    
+    // Wait for chart to render, then print
+    setTimeout(() => {
+        window.print();
+    }, 1000);
+}
+
 </script>
 
 </body>
